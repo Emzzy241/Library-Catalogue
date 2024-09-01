@@ -24,8 +24,9 @@ public class AuthorsController : Controller
         // using ViewBag For the Page's title
         ViewBag.PageTitle = "List of Authors";
 
-        List<Author> model = _db.Authors.ToList(); // Using the ToList() method to convert all authors in my database to a C# list
-        return View();
+        // I gave the list of authors a descriptive name instead of just model
+        List<Author> listOfAuthors = _db.Authors.ToList(); // Using the ToList() method to convert all authors in my database to a C# list
+        return View(listOfAuthors);
     }
 
     public IActionResult Create()
