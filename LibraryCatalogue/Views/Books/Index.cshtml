@@ -17,7 +17,11 @@
 else{
     @foreach(Book book in Model)
     {
-        <p>@book.Name</p>
+        <p>@Html.ActionLink(@book.Name, "Details", new {id = @book.BookId})</p>
     }
 }
-<p>@Html.ActionLink("Create a Book Now", "Create", "Books")</p>
+
+<br />
+<br />
+<br />
+<p class="text-center">@Html.ActionLink("Create a Book Now", "Create", "Books")</p>
