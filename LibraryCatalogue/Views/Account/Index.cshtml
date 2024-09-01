@@ -1,0 +1,28 @@
+@{
+    Layout = "_Layout";
+}
+
+<h2>Library Catalogue Application</h2>
+<hr />
+@if(User.Identity.IsAuthenticated)
+{
+    <p>Hello @User.Identity.Name!</p>
+    <p>You are currently logged in</p>
+    @using (Html.BeginForm("LogOff", "Account"))
+    {
+        <input type="submit" class="btn btn-primary" value ="Log Out"/>
+        
+        
+        <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
+        <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
+         <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
+        <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
+
+    }
+}
+else{
+    <p>@Html.ActionLink("Register", "Register")</p>
+    <p>@Html.ActionLink("Log in", "Login")</p>
+}
+<p>@Html.ActionLink("Home", "Index", "Home")</p>
+

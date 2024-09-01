@@ -1,0 +1,80 @@
+@{
+    ViewData["Title"] = "Authors";
+    Layout = "_Layout";
+}
+
+@using LibraryCatalogue.Models;
+
+<div class="books-div">
+    <div class="container">
+        <h3 class="text-center mt-4">Here are the registered authors</h3>
+
+        <div class="table-responsive mt-5 text-center">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Author Name</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+
+                @* Check if Model is not null before accessing its properties *@
+                @if (Model != null && Model.Count == 0)
+                {
+                    <p>No Authors have been added yet!</p>
+                }
+                else if (Model != null)
+                {
+                    <tbody>
+                        @foreach (Author author in Model)
+                        {
+                            <tr>
+                                <td class="p-3">@author.Name</td>
+                                <td class="p-3">
+                                    @Html.ActionLink("Details", "Details", new { id = author.AuthorId }) |
+                                    @Html.ActionLink("Edit", "Edit", new { id = author.AuthorId }) |
+                                    <button data-bs-target="#Author_Delete_@author.AuthorId" data-bs-toggle="modal" class="btn text-primary">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+        </div>
+
+        <p class="text-end mt-4">
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-dark" })
+        </p>
+    </div>
+</div>
+
+@************************************* Delete Modal **************************@
+
+@if (Model != null && Model.Count != 0)
+{
+    @foreach (Author author in Model)
+    {
+        <div class="modal fade" id="Author_Delete_@author.AuthorId" tabindex="-1"
+             aria-labelledby="AuthorLabel_Delete_@author.AuthorId" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="AuthorLabel_Delete_@author.AuthorId">@author.Name</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure that you want to Delete <b>@author.Name</b>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        @using (Html.BeginForm("Delete", "Authors"))
+                        {
+                            @Html.Hidden("authorId", author.AuthorId);
+                            <input type="submit" class="btn btn-outline-dark" value="Delete">
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

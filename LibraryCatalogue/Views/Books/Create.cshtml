@@ -1,0 +1,31 @@
+@{
+    Layout ="_Layout";
+    ViewData["Title"] = "Books";
+}
+
+@model LibraryCatalogue.Models.Book;
+
+<h4>Creating a Book</h4>
+<p>Fill in  the below details to add in a new book</p>
+
+@using(Html.BeginForm())
+{
+    <div class="form-group mt-4">
+                @Html.LabelFor(model => model.Name , new {@class = "form-label h6"})
+                @Html.TextBoxFor(model => model.Name , new {@class = "form-control"})
+            </div>
+        <br />
+   <div class="form-group mt-3">
+                @Html.LabelFor(model => model.Description , new {@class = "form-label h6"})
+                @Html.TextAreaFor(model => model.Description , new {@class = "form-control"})
+            </div>
+        <br />
+  <div class="form-group mt-3">
+                @Html.Label("Author" , null , new {@class = "form-label h6"})
+                @Html.DropDownList("AuthorId" , null , null , new {@class = "form-control"})
+            </div>
+
+        <br />
+    <input type="submit" class="btn btn-primary" value="submit"/>
+
+}
