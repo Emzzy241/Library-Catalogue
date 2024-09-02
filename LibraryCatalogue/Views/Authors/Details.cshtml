@@ -1,0 +1,37 @@
+@using LibraryCatalogue.Models;
+@model LibraryCatalogue.Models.Author;
+@using System.Collections.Generic;
+
+<br />
+<h4>Author's Details</h4>
+<hr />
+<br />
+<br />
+<h6>Author's name: @Model.Name</h6>
+<br />
+<br />
+
+<p>Below is a book released by <strong>@Model.Name</strong>: </p>
+<br />
+<br />
+@if(@Model.Books.Count == 0)
+{
+    <p>No book has been added to this author yet</p>
+}
+else
+{
+    
+    @foreach(Book book in Model.Books)
+    {
+            <li><strong>@book.Name </strong></li>
+    }
+
+}
+<br />
+
+
+
+<p>@Html.ActionLink("Add Book", "Create","Books")</p>
+<p>@Html.ActionLink("Edit Author", "Edit", new { id = Model.AuthorId })</p>
+<p>@Html.ActionLink("Delete Author", "Delete", new { id = Model.AuthorId })</p>
+<p>@Html.ActionLink("Back to list", "Index")</p>

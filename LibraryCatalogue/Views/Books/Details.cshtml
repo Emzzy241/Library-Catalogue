@@ -1,0 +1,17 @@
+@{
+    Layout = "_Layout";
+}
+
+@using LibraryCatalogue.Models;
+@model LibraryCatalogue.Models.Book;
+
+
+<h5>Details of Book</h5>
+
+
+   <h6> @Model.Name;</h6>
+    <br />
+    <p>@Model.Description</p>
+    <br />
+    <br />
+    <p>@Model.Author</p>

@@ -45,7 +45,7 @@ public class BooksController : Controller
     // The Create Action for logged in users
     public IActionResult Create()
     {
-        ViewBag.PageTitle = "Create A Book";
+        
         // SelectList() method provides a list of the data needed to create an html <select> list of all the books from our database.
         //  The displayed text of each option will be the Authors's Name property, and the value of the <option> will be the Authors's AuthorsId. 
         // That way, a user can select an Authopr from the dropdown to associate with the Book we are creating or editting.
@@ -84,4 +84,16 @@ public class BooksController : Controller
                         .FirstOrDefault(book => book.BookId == id);
         return View(thisBook);
     } 
+
+
+    // Screw the Delete() Get Method, we can use an amazing UI and just one Delete() Post Method, by doing this we reduce the amount of razor code(.cshtml files)
+    // The first waas the Get() Action on the Book so we can actually find the book user is interested in deleting
+    [HttpPost]
+    public IActionResult Delete(int id)
+    {
+        Book thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
+        _db.Books.Remove(thisBook);
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+    }
 }

@@ -13,6 +13,7 @@ public class LibraryCatalogueContext : IdentityDbContext<ApplicationUser>
     public LibraryCatalogueContext(DbContextOptions<LibraryCatalogueContext> options) 
         : base(options) 
     {
+        
     }
 
     // Additional configurations if necessary

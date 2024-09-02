@@ -22,7 +22,7 @@ public class AuthorsController : Controller
     public IActionResult Index()
     {
         // using ViewBag For the Page's title
-        ViewBag.PageTitle = "List of Authors";
+        ;
 
         // I gave the list of authors a descriptive name instead of just model
         List<Author> listOfAuthors = _db.Authors.ToList(); // Using the ToList() method to convert all authors in my database to a C# list
@@ -31,7 +31,7 @@ public class AuthorsController : Controller
 
     public IActionResult Create()
     {
-        ViewBag.PageTitle = "Create an Author";
+        ";
 
         return View();
 
@@ -44,4 +44,62 @@ public class AuthorsController : Controller
         _db.SaveChanges();
         return  RedirectToAction("Index");
     }
+
+    // The Details() Action for the Author's controller
+    // [AllowAnonymous]
+    //     public IActionResult Details(int id)
+    //     {
+    //          var author = _db.Authors.Include(auth => auth.AuthorBooks).ThenInclude(authbk => authbk.Book).FirstOrDefault(auth => auth.AuthorId == id);
+    //          return View(author);
+    //     }
+
+    public ActionResult Details(int id)
+    {
+        
+        
+        // Author has only one navigation property, Author.Books; this is why there is only one .Include() method call. If we want to want to access each item's tag(s), we need to use a series of .ThenInclude() method calls to get the Item.JoinEntities data for each item, and then the joinEntity.Tag data for each entity
+        Author thisAuthor = _db.Authors
+                                .Include(Author => Author.Books) // Here we want to include the Books property, which tells EF Core to fetch every Item object belonging to the Author
+                                // .ThenInclude( item => item.JoinEntities)
+                                // .ThenInclude(join => join.Tag) // with the 2 .ThenInclude(), we are fetching not only a list of Books, but each item's tags
+                                .FirstOrDefault(Author => Author.AuthorId == id);
+        return View(thisAuthor);
+        //Just like before, If we don't explicitly tell EF Core to include the navigation property Author It won't. However We'll still get the Author.AuthorId, Author.Name information, but the navigation property Author will be empty
+    }
+
+
+    // GET: Authors/Delete/5
+    [HttpGet]
+    public IActionResult Delete(int id)
+    {
+        var author = _db.Authors.FirstOrDefault(a => a.AuthorId == id);
+
+        if (author == null)
+        {
+            return NotFound(); // Return a 404 error if the author is not found
+        }
+
+        return View(author); // Show the delete confirmation view
+    }
+
+
+   // POST: Authors/Delete/5
+    [HttpPost, ActionName("DeleteConfirmed")]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteConfirmed(int id)
+    {
+        var author = _db.Authors.FirstOrDefault(a => a.AuthorId == id);
+
+        if (author == null)
+        {
+            return NotFound(); // Handle the case where the author is not found
+        }
+
+        _db.Authors.Remove(author);
+        _db.SaveChanges();
+
+        return RedirectToAction("Index"); // Redirect to the Index view after deletion
+    }
+
+
 }

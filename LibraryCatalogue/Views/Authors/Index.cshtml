@@ -33,7 +33,7 @@
                                 <td class="p-3">
                                     @Html.ActionLink("Details", "Details", new { id = author.AuthorId }) |
                                     @Html.ActionLink("Edit", "Edit", new { id = author.AuthorId }) |
-                                    <button data-bs-target="#Author_Delete_@author.AuthorId" data-bs-toggle="modal" class="btn text-primary">Delete</button>
+                                    <button data-bs-target="#Author_Delete_@author.AuthorId" data-bs-toggle="modal" class="btn btn-link text-danger">Delete</button>
                                 </td>
                             </tr>
                         }
@@ -49,6 +49,9 @@
 </div>
 
 @************************************* Delete Modal **************************@
+@*
+    Added @Html.AntiForgeryToken() to the form to prevent Cross-Site Request Forgery (CSRF) attacks. This is essential for form submissions.
+*@
 
 @if (Model != null && Model.Count != 0)
 {
@@ -59,18 +62,19 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="AuthorLabel_Delete_@author.AuthorId">@author.Name</h5>
+                        <h5 class="modal-title" id="AuthorLabel_Delete_@author.AuthorId">Delete Author - @author.Name?</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure that you want to Delete <b>@author.Name</b>?</p>
+                        <p>Are you sure you want to delete <strong>@author.Name</strong>?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        @using (Html.BeginForm("Delete", "Authors"))
+                        @using (Html.BeginForm("DeleteConfirmed", "Authors", FormMethod.Post))
                         {
-                            @Html.Hidden("authorId", author.AuthorId);
-                            <input type="submit" class="btn btn-outline-dark" value="Delete">
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", author.AuthorId)
+                            <input type="submit" class="btn btn-danger" value="Delete" />
                         }
                     </div>
                 </div>
