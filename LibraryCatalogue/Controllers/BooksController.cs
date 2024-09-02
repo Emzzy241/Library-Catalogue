@@ -85,15 +85,32 @@ public class BooksController : Controller
         return View(thisBook);
     } 
 
-
-    // Screw the Delete() Get Method, we can use an amazing UI and just one Delete() Post Method, by doing this we reduce the amount of razor code(.cshtml files)
-    // The first waas the Get() Action on the Book so we can actually find the book user is interested in deleting
-    [HttpPost]
+    [HttpGet]
     public IActionResult Delete(int id)
     {
         Book thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
+        
+        if(thisBook == null)
+        {
+            return NotFound(); // Return a 404 error if the book is not found
+        }
+        return
+         View(thisBook);
+    }
+   
+    [HttpPost, ActionName("DeleteConfirmed")]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteConfirmed(int id)
+    {
+        Book thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
+       if(thisBook == null)
+       {
+            return NotFound(); // Handling a case where the book is not found
+       }
+       
         _db.Books.Remove(thisBook);
         _db.SaveChanges();
-        return RedirectToAction("Index");
+        return RedirectToAction("Index"); // Redirect to the Index view after deletion
     }
 }
+

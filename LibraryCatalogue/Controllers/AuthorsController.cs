@@ -22,8 +22,7 @@ public class AuthorsController : Controller
     public IActionResult Index()
     {
         // using ViewBag For the Page's title
-        ;
-
+        
         // I gave the list of authors a descriptive name instead of just model
         List<Author> listOfAuthors = _db.Authors.ToList(); // Using the ToList() method to convert all authors in my database to a C# list
         return View(listOfAuthors);
@@ -31,7 +30,7 @@ public class AuthorsController : Controller
 
     public IActionResult Create()
     {
-        ";
+        
 
         return View();
 
@@ -55,8 +54,7 @@ public class AuthorsController : Controller
 
     public ActionResult Details(int id)
     {
-        
-        
+               
         // Author has only one navigation property, Author.Books; this is why there is only one .Include() method call. If we want to want to access each item's tag(s), we need to use a series of .ThenInclude() method calls to get the Item.JoinEntities data for each item, and then the joinEntity.Tag data for each entity
         Author thisAuthor = _db.Authors
                                 .Include(Author => Author.Books) // Here we want to include the Books property, which tells EF Core to fetch every Item object belonging to the Author
@@ -68,7 +66,7 @@ public class AuthorsController : Controller
     }
 
 
-    // GET: Authors/Delete/5
+    // GET: Authors/Delete
     [HttpGet]
     public IActionResult Delete(int id)
     {

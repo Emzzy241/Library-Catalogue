@@ -1,3 +1,5 @@
+@*
+
 @{
     ViewData["Title"] = "Books";
     Layout = "_Layout";
@@ -25,3 +27,119 @@ else{
 <br />
 <br />
 <p class="text-center">@Html.ActionLink("Create a Book Now", "Create", "Books")</p>
+
+*@
+@{
+    ViewData["Title"] = "Books";
+    Layout = "_Layout";
+}
+
+@using LibraryCatalogue.Models;
+@using System.Collections.Generic;
+@model List<LibraryCatalogue.Models.Book>;
+
+<div class="books-div">
+    <div class="container">
+        <h3 class="text-center mt-4">Here are the available books</h3>
+        <div class="search-div">
+            @using (Html.BeginForm("Search", "Books", FormMethod.Post))
+            {
+                <input type="text" name="bookName">
+                <input type="submit" value="Search" class="btn btn-dark">
+            }
+        </div>
+        <div class="table-responsive mt-2">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Book</th>
+                        <th scope="col">Authors</th>
+                        <th scope="col">Copies</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                @if (Model != null && Model.Count != 0)
+                {
+                    <tbody>
+                        @foreach (Book book in Model)
+                        {
+                            <tr>
+                                <td>@book.Name</td>
+                                <td>
+                                    @* Uncomment and update to show authors *@
+                                    @*
+                                    @foreach (var authorBook in book.AuthorBooks)
+                                    {
+                                        <span>@Html.ActionLink(authorBook.Author.Name, "Details", "Authors", new { id = authorBook.AuthorId }, new { @class = "text-primary" }) ,</span>
+                                    }
+                                    *@
+                                </td>
+                                @* Uncomment when the Copies property is ready *@
+                                @* <td>@book.Copies</td> *@
+                                <td>
+                                    @Html.ActionLink("Details", "Details", new { id = book.BookId })
+                                    
+                                    @* Uncomment this section if using role-based access control for actions *@
+                                    @*
+                                    @if (User.IsInRole("Librarian"))
+                                    {
+                                        <span> |</span>
+                                        @Html.ActionLink("Edit", "Edit", new { id = book.BookId })
+                                        <span> |</span>
+                                        <button data-bs-target="#Book_Delete_@book.BookId" data-bs-toggle="modal" class="btn text-danger">Delete</button>
+                                    }
+                                    *@
+
+                                    @* Temporarily showing all actions for testing purposes *@
+                                    <span> |</span>
+                                    @Html.ActionLink("Edit", "Edit", new { id = book.BookId })
+                                    <span> |</span>
+                                    <button data-bs-target="#Book_Delete_@book.BookId" data-bs-toggle="modal" class="btn text-danger">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+        </div>
+        @* Uncomment when role-based access is implemented *@
+        @*
+        @if (User.IsInRole("Librarian"))
+        {
+            <p class="text-end mt-2">@Html.ActionLink("New", "Create", null, new { @class = "btn btn-outline-dark" })</p>
+        }
+        *@
+        <p class="text-end mt-2">@Html.ActionLink("New", "Create", null, new { @class = "btn btn-outline-dark" })</p>
+    </div>
+</div>
+
+@* Delete Modals for each book *@
+@if (Model != null && Model.Count != 0)
+{
+    @foreach (var book in Model)
+    {
+        <div class="modal fade" id="Book_Delete_@book.BookId" tabindex="-1"
+             aria-labelledby="BookLabel_Delete_@book.BookId" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="BookLabel_Delete_@book.BookId">Delete @book.Name</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete <strong>@book.Name book</strong> permanently?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        @using (Html.BeginForm("DeleteConfirmed", "Books", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", book.BookId)
+                            <input type="submit" class="btn btn-danger" value="Delete" />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
