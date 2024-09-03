@@ -14,4 +14,7 @@
     <p>@Model.Description</p>
     <br />
     <br />
-    <p>@Model.Author</p>
+    <p>The book was written by: <strong>@Model.Author.Name</strong></p>
+
+<p>@Html.ActionLink("Back to List of Books", "Index")<p>
+<p>@Html.ActionLink("See list of Authors", "Index", "Authors")<p>

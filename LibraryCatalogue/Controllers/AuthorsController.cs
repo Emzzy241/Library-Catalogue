@@ -1,11 +1,14 @@
 using LibraryCatalogue.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LibrariesController.Controllers;
 
@@ -98,6 +101,35 @@ public class AuthorsController : Controller
 
         return RedirectToAction("Index"); // Redirect to the Index view after deletion
     }
+
+    // The Edit() Action
+    public IActionResult Edit(int id)
+    {
+        Author thisAuthor = _db.Authors.FirstOrDefault(author => author.AuthorId == id);
+
+        if(thisAuthor == null)
+        {
+            return NotFound();
+        }
+        return View(thisAuthor);
+    }
+
+    [HttpPost]
+    public IActionResult Edit(Author author)
+    {
+        if (ModelState.IsValid)
+        {
+            // Correct way to mark the entity as modified
+            _db.Entry(author).State = EntityState.Modified;
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        // If the model state is invalid, return the same view with the model data
+        return View(author);
+    }
+
+
 
 
 }

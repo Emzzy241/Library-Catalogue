@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore; // namespace required o make use of the Inc
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering; // namespace required for SelectList() method
-using Microsoft.AspNetCore.Authorization; // TO implement authorization in the BooksController
+using Microsoft.AspNetCore.Authorization; // TO implement authorization in the 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity; // using the Microsoft Identity namespace so our controller can make use of the UserManager and other tools from identity to get users from the database
 using System;
 using System.Linq; // This is allows to call the ToList() method on our database
@@ -111,6 +112,42 @@ public class BooksController : Controller
         _db.Books.Remove(thisBook);
         _db.SaveChanges();
         return RedirectToAction("Index"); // Redirect to the Index view after deletion
+    }
+
+    // The Edit() Action fro books
+    [HttpGet]
+    public IActionResult Edit(int id)
+    {
+        // We use the below code in finding an object based on its id... Hence, once the id from the book we want to get matches an id in our database, we would like to return that specific object
+        Book thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
+        if(thisBook == null)
+        {
+            return NotFound();
+        }
+        return View(thisBook);
+    }
+
+    // The POST() Action that actually lets us edit a book
+    [HttpPost]
+    public IActionResult Edit(Book book, int AuthorId)
+    {
+        if(ModelState.IsValid)
+        {
+            var authorBook = _db.AuthorBooks.FirstOrDefault(authbk => authbk.AuthorId == AuthorId && authbk.BookId == book.BookId);
+            if(authorBook == null)
+            {
+                if(AuthorId != 0)
+                {
+                    _db.AuthorBooks.Add(new AuthorBook {BookId = book.BookId, AuthorId = AuthorId});
+
+                }
+            }
+            _db.Entry(book).State = EntityState.Modified;
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        return View(book);
     }
 }
 

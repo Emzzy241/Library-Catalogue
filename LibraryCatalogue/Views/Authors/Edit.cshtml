@@ -1,0 +1,31 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Edit An Author";
+}
+
+@using LibraryCatalogue.Models;
+@model LibraryCatalogue.Models.Author;
+
+<h4>You are about to Edit the Author: @Model.Name</h4>
+<br />
+<br />
+<h6>What would you like to edit the Author's name to? </h6>
+
+<div class="">
+    <div class="text-center">
+        <h5>Editting @Model.Name</h5>
+        
+        @using (Html.BeginForm("Edit", "Authors", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(mode => Model.AuthorId)
+            <div class="form-group mt-4 text-center">
+                @Html.LabelFor(model => model.Name, new{@class = "form-label h6"})
+                @Html.TextBoxFor(model => model.Name, new{@class = "form-control text-center"})
+            </div>
+            <br />
+            <input type="submit" class="btn btn-dark" value="Save">
+        }
+        
+    </div>
+</div>
