@@ -115,38 +115,67 @@ public class BooksController : Controller
     }
 
     // The Edit() Action fro books
-    [HttpGet]
+    // [HttpGet]
+    // public IActionResult Edit(int id)
+    // {
+    //     // We use the below code in finding an object based on its id... Hence, once the id from the book we want to get matches an id in our database, we would like to return that specific object
+    //     Book thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
+    //     if(thisBook == null)
+    //     {
+    //         return NotFound();
+    //     }
+    //     return View(thisBook);
+    // } or use the .Find() method
     public IActionResult Edit(int id)
     {
-        // We use the below code in finding an object based on its id... Hence, once the id from the book we want to get matches an id in our database, we would like to return that specific object
-        Book thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
-        if(thisBook == null)
+        var book = _db.Books.Find(id); // Fetch the book that is being edited
+        if (book == null)
         {
             return NotFound();
         }
-        return View(thisBook);
+
+        // Fetch authors from the database to populate the dropdown
+        ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name", book.AuthorId);
+        
+        return View(book);
     }
 
     // The POST() Action that actually lets us edit a book
-    [HttpPost]
-    public IActionResult Edit(Book book, int AuthorId)
-    {
-        if(ModelState.IsValid)
-        {
-            var authorBook = _db.AuthorBooks.FirstOrDefault(authbk => authbk.AuthorId == AuthorId && authbk.BookId == book.BookId);
-            if(authorBook == null)
-            {
-                if(AuthorId != 0)
-                {
-                    _db.AuthorBooks.Add(new AuthorBook {BookId = book.BookId, AuthorId = AuthorId});
+    // [HttpPost]
+    // public IActionResult Edit(Book book, int AuthorId)
+    // {
+    //     if(ModelState.IsValid)
+    //     {
+    //         var authorBook = _db.AuthorBooks.FirstOrDefault(authbk => authbk.AuthorId == AuthorId && authbk.BookId == book.BookId);
+    //         if(authorBook == null)
+    //         {
+    //             if(AuthorId != 0)
+    //             {
+    //                 _db.AuthorBooks.Add(new AuthorBook {BookId = book.BookId, AuthorId = AuthorId});
 
-                }
-            }
+    //             }
+    //         }
+    //         _db.Entry(book).State = EntityState.Modified;
+    //         _db.SaveChanges();
+    //         return RedirectToAction("Index");
+    //     }
+
+    //     return View(book);
+    // }
+
+    [HttpPost]
+    public IActionResult Edit(Book book)
+    {
+        if (ModelState.IsValid)
+        {
             _db.Entry(book).State = EntityState.Modified;
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
+        // Repopulate authors list in case of an invalid model state
+        ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name", book.AuthorId);
+        
         return View(book);
     }
 }
