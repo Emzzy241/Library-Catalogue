@@ -1,0 +1,55 @@
+@{
+    ViewData["Title"] = "Checkouts";
+    Layout = "_Layout";
+}
+
+@model IEnumerable<LibraryCatalogue.Models.Checkout>;
+
+@using LibraryCatalogue.Models;
+
+<div class="checkouts-div">
+    <div class="container text-center">
+        <h3 class="mt-4">Checkouts</h3>
+        @************************* All Users **************************@
+
+        @if (User.IsInRole("Liberian"))
+        {
+            <p class="my-3">@Html.ActionLink("All Users" , "AllCheckouts" , "Checkouts" , null , new {@class = "h6"})</p>
+        }
+        <div id="user-checkout">
+            <div class="table-responsive mt-2">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Book</th>
+                            <th scope="col">Date Collected</th>
+                            <th scope="col">Due Date</th>
+                        </tr>
+                    </thead>
+                    @if (Model.Any())
+                    {
+                        <tbody>
+                            @foreach (var checkout in Model)
+                            {
+                                <tr>
+                                    <td class="py-3">@checkout.Book.Name</td>
+                                    <td class="py-3">@checkout.Date</td>
+                                        @if (checkout.IsDue())
+                                        {
+                                        <td class="text-danger py-3">Due</td>
+                                        }
+                                        else
+                                        {
+                                        <td class="py-3">@checkout.Date.AddDays(7).ToString()</td>
+                                        }
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>

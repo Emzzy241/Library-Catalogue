@@ -55,14 +55,15 @@ public class AuthorsController : Controller
     //          return View(author);
     //     }
 
+
+    [AllowAnonymous] 
     public ActionResult Details(int id)
     {
                
         // Author has only one navigation property, Author.Books; this is why there is only one .Include() method call. If we want to want to access each item's tag(s), we need to use a series of .ThenInclude() method calls to get the Item.JoinEntities data for each item, and then the joinEntity.Tag data for each entity
         Author thisAuthor = _db.Authors
-                                .Include(Author => Author.Books) // Here we want to include the Books property, which tells EF Core to fetch every Item object belonging to the Author
-                                // .ThenInclude( item => item.JoinEntities)
-                                // .ThenInclude(join => join.Tag) // with the 2 .ThenInclude(), we are fetching not only a list of Books, but each item's tags
+                                .Include(Author => Author.AuthorBooks) 
+                                .ThenInclude(authbk => authbk.Book)
                                 .FirstOrDefault(Author => Author.AuthorId == id);
         return View(thisAuthor);
         //Just like before, If we don't explicitly tell EF Core to include the navigation property Author It won't. However We'll still get the Author.AuthorId, Author.Name information, but the navigation property Author will be empty

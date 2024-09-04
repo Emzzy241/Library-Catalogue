@@ -19,30 +19,32 @@ public class BooksController : Controller
 {
     private readonly LibraryCatalogueContext _db;
 
-    // Adding Identity's UserManager class to our controller so we can access tools to get us data about the signed-in user
-    // TO do this we will add a new property in the controller ad also update our constructor with that property
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public BooksController(LibraryCatalogueContext db, UserManager<ApplicationUser> userManager)
+   
+    public BooksController(LibraryCatalogueContext db)
     {
         _db = db;
-        _userManager = userManager;
     }
     
 
-    public async Task<IActionResult> Index()
+    // public async Task<IActionResult> Index()
+    // {
+    //     // Below code is to verify if user is truly signed in & then get all books for them so it can be viewed
+    //     // It can be nullable, hence the need for a question mark(?)
+    //     string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    //     ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+    //     List<Book> userBooks = _db.Books
+    //                             .Where(entry => entry.User.Id == currentUser.Id)
+    //                             .Include(book => book.Author)
+    //                             .ToList();
+    //     return View(userBooks);
+    // }
+     public IActionResult Index()
     {
-        // Below code is to verify if user is truly signed in & then get all books for them so it can be viewed
-        // It can be nullable, hence the need for a question mark(?)
-        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-        List<Book> userBooks = _db.Books
-                                .Where(entry => entry.User.Id == currentUser.Id)
-                                .Include(book => book.Author)
-                                .ToList();
-        return View(userBooks);
+        List<Book> books= _db.Books.Include(books => books.AuthorBooks).ThenInclude(authorbook => authorbook.Author).ToList();
+        return View(books);
     }
 
+    [Authorize(Roles = "Librarian")]
     // The Create Action for logged in users
     public IActionResult Create()
     {
@@ -55,37 +57,52 @@ public class BooksController : Controller
         return View();
     }
 
+    [Authorize(Roles = "Librarian")]
+    // [HttpPost]
+    // public async Task<IActionResult> Create(Book book, int AuthorId)
+    // {
+    //     if(!ModelState.IsValid)
+    //     {
+    //         ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
+    //         return View(book);
+    //     }
+    //     else
+    //     {
+    //         string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    //         ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+    //         book.User = currentUser;
+    //         _db.Books.Add(book);
+    //         _db.SaveChanges();
+    //         return RedirectToAction("Index");
+    //     }
+    // }
+
     [HttpPost]
-    public async Task<IActionResult> Create(Book book, int AuthorId)
-    {
-        if(!ModelState.IsValid)
+     public IActionResult Create(Book book , int AuthorId)
         {
-            ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
-            return View(book);
-        }
-        else
-        {
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-            book.User = currentUser;
             _db.Books.Add(book);
+            _db.SaveChanges();
+            if(AuthorId != 0)
+            {
+                _db.AuthorBooks.Add(new AuthorBook{AuthorId = AuthorId , BookId = book.BookId});
+            }
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
-    }
 
     // The Read Action for all users irrespective of logging in
     public ActionResult Details(int id)
     {
         // Displaying a Book's details to all users
         Book thisBook = _db.Books
-                        .Include(book => book.Author)
-                        // .Include(book => book.JoinEntities)
-                        // .ThenInclude(join => join.Tag)
+                        .Include(book => book.AuthorBooks)
+                        .ThenInclude(authbk => authbk.Author)
+                        
                         .FirstOrDefault(book => book.BookId == id);
         return View(thisBook);
     } 
 
+    [Authorize(Roles = "Librarian")]
     [HttpGet]
     public IActionResult Delete(int id)
     {
@@ -99,6 +116,7 @@ public class BooksController : Controller
          View(thisBook);
     }
    
+   [Authorize(Roles = "Librarian")]
     [HttpPost, ActionName("DeleteConfirmed")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int id)
@@ -114,7 +132,7 @@ public class BooksController : Controller
         return RedirectToAction("Index"); // Redirect to the Index view after deletion
     }
 
-    // The Edit() Action fro books
+    // The Edit() Action from books
     // [HttpGet]
     // public IActionResult Edit(int id)
     // {
@@ -126,6 +144,7 @@ public class BooksController : Controller
     //     }
     //     return View(thisBook);
     // } or use the .Find() method
+    [Authorize(Roles = "Librarian")]
     public IActionResult Edit(int id)
     {
         var book = _db.Books.Find(id); // Fetch the book that is being edited
@@ -135,48 +154,89 @@ public class BooksController : Controller
         }
 
         // Fetch authors from the database to populate the dropdown
-        ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name", book.AuthorId);
+        ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
         
         return View(book);
     }
 
-    // The POST() Action that actually lets us edit a book
+        // var authorbook = _db.AuthorBooks.FirstOrDefault(authbk => authbk.AuthorId == AuthorId && authbk.BookId = book.BookId);
+    
+    [Authorize(Roles = "Librarian")]
     // [HttpPost]
     // public IActionResult Edit(Book book, int AuthorId)
     // {
-    //     if(ModelState.IsValid)
+        
+    //     if (ModelState.IsValid)
     //     {
-    //         var authorBook = _db.AuthorBooks.FirstOrDefault(authbk => authbk.AuthorId == AuthorId && authbk.BookId == book.BookId);
-    //         if(authorBook == null)
-    //         {
-    //             if(AuthorId != 0)
-    //             {
-    //                 _db.AuthorBooks.Add(new AuthorBook {BookId = book.BookId, AuthorId = AuthorId});
-
-    //             }
-    //         }
     //         _db.Entry(book).State = EntityState.Modified;
     //         _db.SaveChanges();
     //         return RedirectToAction("Index");
     //     }
 
+    //     // Repopulate authors list in case of an invalid model state
+    //     ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
+        
     //     return View(book);
     // }
 
     [HttpPost]
-    public IActionResult Edit(Book book)
+    public IActionResult Edit(Book book, int AuthorId)
     {
-        if (ModelState.IsValid)
+        var authorbook = _db.AuthorBooks.FirstOrDefault(authbk => authbk.AuthorId == AuthorId && authbk.BookId == book.BookId);
+        if(authorbook == null)
         {
+            if(AuthorId != 0)
+            {
+                _db.AuthorBooks.Add(new AuthorBook {BookId = book.BookId, AuthorId = AuthorId});
+            }
+
+        }
             _db.Entry(book).State = EntityState.Modified;
             _db.SaveChanges();
             return RedirectToAction("Index");
-        }
+    }
 
-        // Repopulate authors list in case of an invalid model state
-        ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name", book.AuthorId);
-        
+    // Implementing the AddAuthor() action
+    [Authorize(Roles = "Librarian")]
+    public IActionResult AddAuthor(int id)
+    {
+        var book = _db.Books.Find(id);
+        // or use the previous: var book = _db.Books.FirstOrDefault(bk => bk.BookId == id);
+        ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
         return View(book);
     }
+
+    [Authorize(Roles = "Librarian")]
+    [HttpPost]
+    public IActionResult AddAuthor(Book book, int AuthorId)
+    {
+        if(AuthorId != 0)
+        {
+            // Instantiating a new object as soon as the Author's id value is not 0, and giving this object the needed requirement(AuthorId, BookId) to make it properly instantiates
+            _db.AuthorBooks.Add(new AuthorBook{ BookId = book.BookId, AuthorId = AuthorId});
+        }
+        _db.SaveChanges();
+        return RedirectToAction("Details", new { id = book.BookId});
+    }
+
+    [Authorize(Roles = "Librarian")]
+    [HttpPost]
+    public IActionResult RemoveAuthor(int AuthorBookId)
+    {
+        var authorbook = _db.AuthorBooks.Find(AuthorBookId);
+        // var authorbook = _db.Books.FirstOrDefault(authb => authb.AuthorBookId = AuthorBookId);
+        _db.AuthorBooks.Remove(authorbook);
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+    }
+
+    // Implementing the Search Feature so a librarian can search for a book by author or title, so that Librarian can find a book when there are a lot of books in the library
+    [HttpPost]
+    public IActionResult Search(string bookName)
+    {
+        List<Book> book = _db.Books.Where(bk => bk.Name.ToLower().Contains(bookName.ToLower())).ToList();
+        return View("Index", book);
+    }
+
 }
 

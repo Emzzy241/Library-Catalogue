@@ -3,6 +3,7 @@
 }
 
 @using LibraryCatalogue.ViewModels
+@using System.Security.Claims;
 
 @model LoginViewModel
 
@@ -11,18 +12,22 @@
 
 @if(!ViewData.ModelState.IsValid)
 {
-    @Html.ValidationSummary("Please fix the following error(s) and then resubmit the form");
+    @Html.ValidationSummary("Please fix the following error(s) and then resubmit the form", new {@class = "text-danger"});
 }
 
 @using (Html.BeginForm())
 {
-    @Html.LabelFor(m => m.Email)
-    @Html.TextBoxFor(m => m.Email)
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email)
+    </div>
     <br />
     <br />
 
-    @Html.LabelFor(m => m.Password)
-    @Html.TextBoxFor(m => m.Password)
+   <div class="form-group">
+        @Html.LabelFor(m => m.Password)
+        @Html.TextBoxFor(m => m.Password)
+   </div>
     <br />
     <br />
 

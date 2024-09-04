@@ -6,6 +6,11 @@ using System.ComponentModel.DataAnnotations;
 namespace LibraryCatalogue.Models;
 public class Book
 {
+    public Book()
+    {
+        this.AuthorBooks = new HashSet<AuthorBook>();
+        this.Checkouts = new HashSet<Checkout>();
+    }
     public int BookId { get; set; }
 
     // adding a Book name property
@@ -13,15 +18,19 @@ public class Book
     [Required(ErrorMessage = "The book's Name cannot be empty!")]
     public string Name { get; set; }
     public string Description { get; set; }
+
+    public int Copies { get; set; }
+    public virtual ICollection<AuthorBook> AuthorBooks { get; set; }
+    public virtual ICollection<Checkout> Checkouts { get; set; }
     
     
 
     // Now its time for the Author for each book
-    [Range(1, int.MaxValue, ErrorMessage = "You must add an author to your book. Have you created an author yet?")]
-    public int AuthorId { get; set; }
-    public Author Author { get; set; }
-    // public List<BookTag> JoinEntities { get; set; }
-    public ApplicationUser User { get; set; }
+    // [Range(1, int.MaxValue, ErrorMessage = "You must add an author to your book. Have you created an author yet?")]
+    // public int AuthorId { get; set; }
+    // public Author Author { get; set; }
+    // // public List<BookTag> JoinEntities { get; set; }
+    // public ApplicationUser User { get; set; }
 
     // No constructor needed
 }

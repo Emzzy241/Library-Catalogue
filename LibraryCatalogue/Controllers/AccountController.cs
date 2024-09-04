@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using LibraryCatalogue.Models;
 using LibraryCatalogue.ViewModels;
 using System.Threading.Tasks;
@@ -8,16 +11,21 @@ namespace LibraryCatalogue.Controllers;
 public class AccountController : Controller
 {
     private readonly LibraryCatalogueContext _db;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<LibraryUser> _userManager;
+    private readonly SignInManager<LibraryUser> _signInManager;
+    // Implementing the RoleManager From Identity to help define Roles that my users can perform
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public AccountController(LibraryCatalogueContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+    // No need to make everything authorized only with the ApplicationUser role, because now we have written our own roles: LibraryUser and Patrons
+    public AccountController(LibraryCatalogueContext db, UserManager<LibraryUser> userManager, SignInManager<LibraryUser> signInManager, RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _db = db;
+        _roleManager = roleManager;
     }
 
+    [Authorize]
     public IActionResult Index()
     {
         return View();
@@ -40,11 +48,14 @@ public class AccountController : Controller
         }
         else
         {
-            ApplicationUser user = new ApplicationUser { UserName = model.Email };
+            // ApplicationUser user = new ApplicationUser { UserName = model.Email };
+            
+            var user = new LibraryUser{ UserName = model.Email, FirstName = model.FirstName, LastName = model.LastName };
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
             if(result.Succeeded)
             {
-                return RedirectToAction("Index");
+                await _userManager.AddToRoleAsync(user, "Patron");
+                return RedirectToAction("Login");
             }
             else
             {
@@ -76,7 +87,7 @@ public class AccountController : Controller
             Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: true, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Account");
             }
             else
             {

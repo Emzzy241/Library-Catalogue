@@ -3,6 +3,7 @@ using System;
 using LibraryCatalogue.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryCatalogue.Solution.Migrations
 {
     [DbContext(typeof(LibraryCatalogueContext))]
-    partial class LibraryCatalogueContextModelSnapshot : ModelSnapshot
+    [Migration("20240903144811_Add Checkout Entity")]
+    partial class AddCheckoutEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,6 +62,9 @@ namespace LibraryCatalogue.Solution.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int?>("AuthorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Copies")
                         .HasColumnType("int");
 
@@ -71,6 +76,8 @@ namespace LibraryCatalogue.Solution.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("BookId");
+
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Books");
                 });
@@ -303,7 +310,7 @@ namespace LibraryCatalogue.Solution.Migrations
             modelBuilder.Entity("LibraryCatalogue.Models.AuthorBook", b =>
                 {
                     b.HasOne("LibraryCatalogue.Models.Author", "Author")
-                        .WithMany("AuthorBooks")
+                        .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -317,6 +324,13 @@ namespace LibraryCatalogue.Solution.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("LibraryCatalogue.Models.Book", b =>
+                {
+                    b.HasOne("LibraryCatalogue.Models.Author", null)
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorId");
                 });
 
             modelBuilder.Entity("LibraryCatalogue.Models.Checkout", b =>
@@ -389,7 +403,7 @@ namespace LibraryCatalogue.Solution.Migrations
 
             modelBuilder.Entity("LibraryCatalogue.Models.Author", b =>
                 {
-                    b.Navigation("AuthorBooks");
+                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("LibraryCatalogue.Models.Book", b =>

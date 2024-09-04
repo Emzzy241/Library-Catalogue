@@ -6,15 +6,34 @@
 @model LibraryCatalogue.Models.Book;
 
 
-<h5>Details of Book</h5>
-
-
-   <h6> @Model.Name;</h6>
-    <br />
-    <p>@Model.Description</p>
-    <br />
-    <br />
-    <p>The book was written by: <strong>@Model.Author.Name</strong></p>
-
-<p>@Html.ActionLink("Back to List of Books", "Index")<p>
-<p>@Html.ActionLink("See list of Authors", "Index", "Authors")<p>
+<div class="details-div">
+    <div class="container pt-5">
+        <p class="text-danger">All books must be returned after/before one week of checkout</p>
+        <p class="text-end">
+            <button data-bs-target = "#Book_Checkout_@Model.BookId" data-bs-toggle = "modal" class="btn btn-dark">Checkout</button>
+            @if(User.IsInRole("Librarian"))
+            {
+                <button data-bs-target = "#Book_Details_Delete_@Model.BookId" data-bs-toggle = "modal" class="btn btn-danger">Delete</button>
+            }
+        </p>
+        <h3>@Model.Name</h3>
+        <p>@Model.Description</p>
+        <p class="mt-3"><b>Available</b> : @Model.Copies</p>
+        <h4 class="mt-4">Authors - @Html.ActionLink("Add" , "AddAuthor" , "Books" , new {id = @Model.BookId} , new {@class = "btn btn-dark"})</h4>
+        @if(Model.AuthorBooks.Count != 0)
+        {
+            <div class="grid-div">
+                @foreach(var authorBook in Model.AuthorBooks)
+                {
+                    <div class="grid-item">
+                        <h5>@authorBook.Author.Name</h5>
+                        @if(User.IsInRole("Librarian"))
+                        {
+                           <button class="btn btn-danger mt-3" data-bs-target="#book_details_authorbooks_delete_@authorBook.AuthorBookId" data-bs-toggle="modal">Remove</button>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

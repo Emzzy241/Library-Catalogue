@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Create";
+    Layout = "_Layout";
+}
+
+@model LibraryCatalogue.Models.Book;
+<div class="create-form">
+    <div class="text-center">
+        <h3>Add new Book</h3>
+        @using (Html.BeginForm())
+        {
+            @Html.HiddenFor(model => model.BookId)
+            <div class="form-group mt-3 text-center">
+                @Html.Label("Author" , null , new {@class = "form-label h6"})
+                @Html.DropDownList("AuthorId" , null , null , new {@class = "form-control text-center"})
+            </div>
+            <input type="submit" class="btn btn-dark mt-2" value="Save">
+        }
+    </div>
+</div>

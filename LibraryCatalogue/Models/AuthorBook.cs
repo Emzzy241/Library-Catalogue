@@ -1,3 +1,4 @@
+// AuthorBook is th eJoin table that is used to show the any-to-many relationship between 2 Entities
 // Entity used to describe relationship between author and book
 
 using LibraryCatalogue.Models;

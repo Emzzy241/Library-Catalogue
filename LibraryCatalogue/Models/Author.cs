@@ -6,11 +6,20 @@ namespace LibraryCatalogue.Models;
 
 public class Author
 {
+    public Author()
+    {
+        this.AuthorBooks = new HashSet<AuthorBook>();
+    }
     public string Name { get; set; }
     
     public int AuthorId { get; set; }
+
+    public virtual ICollection<AuthorBook> AuthorBooks { get; set; }
     
-    public List<Book> Books { get; set; } // This is the navigation property, specifically a 'collection navigation property'
+
+
+    // No longer used the navigation property
+    // public List<Book> Books { get; set; } // This is the navigation property, specifically a 'collection navigation property'
 
     // A navigaton property is a property on one entity(like Author) that includes a reference to a related entity (like Book)
     // Ef core uses navigation property to recognize a relationship between an Author and Book

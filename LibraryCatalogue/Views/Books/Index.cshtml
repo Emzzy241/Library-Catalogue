@@ -29,6 +29,8 @@ else{
 <p class="text-center">@Html.ActionLink("Create a Book Now", "Create", "Books")</p>
 
 *@
+
+
 @{
     ViewData["Title"] = "Books";
     Layout = "_Layout";
@@ -67,20 +69,19 @@ else{
                                 <td>@book.Name</td>
                                 <td>
                                     @* Uncomment and update to show authors *@
-                                    @*
+                                    
                                     @foreach (var authorBook in book.AuthorBooks)
                                     {
                                         <span>@Html.ActionLink(authorBook.Author.Name, "Details", "Authors", new { id = authorBook.AuthorId }, new { @class = "text-primary" }) ,</span>
                                     }
-                                    *@
+                                    
                                 </td>
-                                @* Uncomment when the Copies property is ready *@
-                                @* <td>@book.Copies</td> *@
+                               <td>@book.Copies</td> 
                                 <td>
                                     @Html.ActionLink("Details", "Details", new { id = book.BookId })
                                     
                                     @* Uncomment this section if using role-based access control for actions *@
-                                    @*
+                                    
                                     @if (User.IsInRole("Librarian"))
                                     {
                                         <span> |</span>
@@ -88,7 +89,7 @@ else{
                                         <span> |</span>
                                         <button data-bs-target="#Book_Delete_@book.BookId" data-bs-toggle="modal" class="btn text-danger">Delete</button>
                                     }
-                                    *@
+                                    
 
                                     @* Temporarily showing all actions for testing purposes *@
                                     <span> |</span>
@@ -103,12 +104,12 @@ else{
             </table>
         </div>
         @* Uncomment when role-based access is implemented *@
-        @*
+        
         @if (User.IsInRole("Librarian"))
         {
             <p class="text-end mt-2">@Html.ActionLink("New", "Create", null, new { @class = "btn btn-outline-dark" })</p>
         }
-        *@
+        
         <p class="text-end mt-2">@Html.ActionLink("New", "Create", null, new { @class = "btn btn-outline-dark" })</p>
     </div>
 </div>

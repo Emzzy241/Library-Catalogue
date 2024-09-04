@@ -16,22 +16,42 @@
 
 @using (Html.BeginForm("Register", "Account", FormMethod.Post))
 {
-    @Html.LabelFor(user => user.Email)
-    @Html.TextBoxFor(user => user.Email)
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName , new {@class = "form-label"})
+        @Html.TextBoxFor(model => model.FirstName)
+    </div>
     <br />
-    <br />
-
-    @Html.LabelFor(user => user.Password)
-    @Html.TextBoxFor(user => user.Password)
-    <br />
-    <br />
-
-    @Html.LabelFor(user => user.ConfirmPassword)
-    @Html.TextBoxFor(user => user.ConfirmPassword)
-    <br />
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName , new {@class = "form-label"})
+        @Html.TextBoxFor(model => model.LastName)
+    </div>
     <br />
 
-    <input type="submit" value="Regsiter" class="btn btn-primary"/>
+    <div class="form-group">
+        @Html.LabelFor(user => user.Email)
+        @Html.TextBoxFor(user => user.Email)
+    </div>
+    <br />
+    
+    <br />
+
+    <div class="form-group">
+        @Html.LabelFor(user => user.Password)
+        @Html.TextBoxFor(user => user.Password)
+    </div>
+    
+    <br />
+
+    <div class="form-group">
+        @Html.LabelFor(user => user.ConfirmPassword)
+        @Html.TextBoxFor(user => user.ConfirmPassword)
+    </div>
+    <br />
+
+    <div class="text-center">
+        <input type="submit" value="Regsiter" class="btn btn-primary"/>
+    </div>
+    <br />
 }
     <br />
     <p>Already have an account? Login Now:</p>

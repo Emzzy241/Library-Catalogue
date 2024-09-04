@@ -3,6 +3,7 @@ using System;
 using LibraryCatalogue.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,99 +11,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryCatalogue.Solution.Migrations
 {
     [DbContext(typeof(LibraryCatalogueContext))]
-    partial class LibraryCatalogueContextModelSnapshot : ModelSnapshot
+    [Migration("20240903142347_Update App with Join Table")]
+    partial class UpdateAppwithJoinTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("LibraryCatalogue.Models.Author", b =>
-                {
-                    b.Property<int>("AuthorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("AuthorId");
-
-                    b.ToTable("Authors");
-                });
-
-            modelBuilder.Entity("LibraryCatalogue.Models.AuthorBook", b =>
-                {
-                    b.Property<int>("AuthorBookId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AuthorBookId");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("AuthorBooks");
-                });
-
-            modelBuilder.Entity("LibraryCatalogue.Models.Book", b =>
-                {
-                    b.Property<int>("BookId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("Copies")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("BookId");
-
-                    b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("LibraryCatalogue.Models.Checkout", b =>
-                {
-                    b.Property<int>("CheckoutId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("Returned")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("CheckoutId");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Checkouts");
-                });
-
-            modelBuilder.Entity("LibraryCatalogue.Models.LibraryUser", b =>
+            modelBuilder.Entity("LibraryCatalogue.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -120,12 +39,6 @@ namespace LibraryCatalogue.Solution.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -170,6 +83,152 @@ namespace LibraryCatalogue.Solution.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("LibraryCatalogue.Models.Author", b =>
+                {
+                    b.Property<int>("AuthorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("AuthorId");
+
+                    b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("LibraryCatalogue.Models.AuthorBook", b =>
+                {
+                    b.Property<int>("AuthorBookId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuthorBookId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("AuthorBooks");
+                });
+
+            modelBuilder.Entity("LibraryCatalogue.Models.Book", b =>
+                {
+                    b.Property<int>("BookId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Copies")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("BookId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("LibraryCatalogue.Models.Checkout", b =>
+                {
+                    b.Property<int>("CheckoutId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("Returned")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("CheckoutId");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Checkout");
+                });
+
+            modelBuilder.Entity("LibraryCatalogue.Models.LibraryUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LibraryUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -303,7 +362,7 @@ namespace LibraryCatalogue.Solution.Migrations
             modelBuilder.Entity("LibraryCatalogue.Models.AuthorBook", b =>
                 {
                     b.HasOne("LibraryCatalogue.Models.Author", "Author")
-                        .WithMany("AuthorBooks")
+                        .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -317,6 +376,13 @@ namespace LibraryCatalogue.Solution.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("LibraryCatalogue.Models.Book", b =>
+                {
+                    b.HasOne("LibraryCatalogue.Models.Author", null)
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorId");
                 });
 
             modelBuilder.Entity("LibraryCatalogue.Models.Checkout", b =>
@@ -347,7 +413,7 @@ namespace LibraryCatalogue.Solution.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("LibraryCatalogue.Models.LibraryUser", null)
+                    b.HasOne("LibraryCatalogue.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -356,7 +422,7 @@ namespace LibraryCatalogue.Solution.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("LibraryCatalogue.Models.LibraryUser", null)
+                    b.HasOne("LibraryCatalogue.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -371,7 +437,7 @@ namespace LibraryCatalogue.Solution.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryCatalogue.Models.LibraryUser", null)
+                    b.HasOne("LibraryCatalogue.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -380,7 +446,7 @@ namespace LibraryCatalogue.Solution.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("LibraryCatalogue.Models.LibraryUser", null)
+                    b.HasOne("LibraryCatalogue.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -389,7 +455,7 @@ namespace LibraryCatalogue.Solution.Migrations
 
             modelBuilder.Entity("LibraryCatalogue.Models.Author", b =>
                 {
-                    b.Navigation("AuthorBooks");
+                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("LibraryCatalogue.Models.Book", b =>

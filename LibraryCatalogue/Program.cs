@@ -32,9 +32,12 @@ namespace LibraryCatalogue;
         The order in which we set up the middleware matters! If these methods are called in the wrong order, you may run into unhandled exceptions or issues logging in with Identity. Fortunately, the Microsoft Docs has a list of how middleware should be ordered.
       */
 
+      builder.Services.AddMvc();
+      builder.Services.AddEntityFrameworkMySql();
       // override Identity's default settings by configuring our Identity service
 
-      builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+      builder.Services.AddIdentity<LibraryUser, IdentityRole>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<LibraryCatalogueContext>()
                 .AddDefaultTokenProviders();
 

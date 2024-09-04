@@ -1,37 +1,74 @@
+@{
+    ViewData["Title"] = "Book";
+    Layout = "_Layout";
+}
+
 @using LibraryCatalogue.Models;
+
 @model LibraryCatalogue.Models.Author;
-@using System.Collections.Generic;
 
-<br />
-<h4>Author's Details</h4>
-<hr />
-<br />
-<br />
-<h6>Author's name: @Model.Name</h6>
-<br />
-<br />
+<div class="details-div">
+    <div class="container pt-5">
+        @if(User.IsInRole("Librarian"))
+        {
+            <p class="text-end">
+                    <button data-bs-target = "#Author_Details_Delete_@Model.AuthorId" data-bs-toggle = "modal" class="btn btn-danger ml-2">Delete</button>
+            </p>
+        }
+        <h3>@Model.Name</h3>
+        <h4>Books</h4>
+        @if(Model.AuthorBooks.Count != 0)
+        {
+            <div class="table-responsive mt-2">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                    </tr>
+                </thead>
+                @if (Model.AuthorBooks.Count != 0)
+                {
+                    <tbody>
+                        @foreach (var authorBook in Model.AuthorBooks)
+                        {
+                            <tr>
+                                <td>@authorBook.BookId</td>
+                                <td>@Html.ActionLink(authorBook.Book.Name , "Details" , "Books" , new {id = authorBook.BookId} , new {@class = "nav-link text-primary"})</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+        </div>
+        }
+    </div>
+</div>
 
-<p>Below is a list of books released by the author <strong>@Model.Name</strong>: </p>
-<br />
-<br />
-@if(@Model.Books.Count == 0)
-{
-    <p>No book has been added to this author yet</p>
-}
-else
-{
-    
-    @foreach(Book book in Model.Books)
-    {
-            <li><strong>@book.Name </strong></li>
-    }
 
-}
-<br />
+@************************************* Delete Modal **************************@
 
-
-
-<p>@Html.ActionLink("Add Book", "Create","Books")</p>
-<p>@Html.ActionLink("Edit Author", "Edit", new { id = Model.AuthorId })</p>
-<p>@Html.ActionLink("Delete Author", "Delete", new { id = Model.AuthorId })</p>
-<p>@Html.ActionLink("Back to list", "Index")</p>
+    <div class="modal fade" id="Author_Details_Delete_@Model.AuthorId" tabindex="-1"
+                                aria-labelledby="AuthorLabel_Details_Delete_@Model.AuthorId" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="AuthorLabel_Details_Delete_@Model.AuthorId">Delete @Model.Name</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure that you want to Delete <b>@Model.Name</b> </p>
+                                                </div>`
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                                    @using (Html.BeginForm("Delete", "Authors"))
+                                                    {
+                                                        @Html.Hidden("authorId" , Model.AuthorId);
+                                                        <input type="submit" class="btn btn-outline-dark" value="Delete">
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>

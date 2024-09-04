@@ -1,0 +1,43 @@
+using LibraryCatalogue.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+
+
+namespace CheckoutsController;
+public class CheckoutsController : Controller
+{
+    private readonly LibraryCatalogueContext _db;
+    private readonly SignInManager<LibraryUser> _signInManager;
+    private readonly UserManager<LibraryUser> _userManager;
+
+    public CheckoutsController(LibraryCatalogueContext db, SignInManager<LibraryUser> signInManager, UserManager<LibraryUser> userManager)
+    {
+        _db = db;
+        _signInManager = signInManager;
+        _userManager = userManager;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        // using ? because there are times when the userId can be zero... Its even one of the big reasons why we used var to declare our variable, we could have simply used somethng else like an int since user's id is expected to be an integer
+        // Using var to declareour variables when writing async code is very beneficial because since its a code that runs later, we don't have an idea on what it will return
+
+        var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var currentUser = await _userManager.FindByIdAsync(userId);
+        var model = _db.Checkouts.Include(checkout => checkout.Book)
+                                 .Where(entry => entry.User.Id == currentUser.Id)
+                                 .OrderByDescending(checkout => checkout.CheckoutId).ToList();
+        // Remmeber, the ToLIst() method is a method that helps in converting the output from our database into a C# List<T>
+        ViewBag.ErrorMessage = "";
+        return View(model);
+    }
+}
