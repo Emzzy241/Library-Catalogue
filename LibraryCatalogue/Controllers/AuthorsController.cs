@@ -12,6 +12,7 @@ using System.Linq;
 
 namespace LibrariesController.Controllers;
 
+[Authorize(Roles = "Librarian")]
 public class AuthorsController : Controller
 {
     private readonly LibraryCatalogueContext _db;
@@ -65,6 +66,11 @@ public class AuthorsController : Controller
                                 .Include(Author => Author.AuthorBooks) 
                                 .ThenInclude(authbk => authbk.Book)
                                 .FirstOrDefault(Author => Author.AuthorId == id);
+
+        if(thisAuthor == null)
+        {
+            return NotFound();
+        }   
         return View(thisAuthor);
         //Just like before, If we don't explicitly tell EF Core to include the navigation property Author It won't. However We'll still get the Author.AuthorId, Author.Name information, but the navigation property Author will be empty
     }

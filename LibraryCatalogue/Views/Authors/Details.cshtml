@@ -7,6 +7,7 @@
 
 @model LibraryCatalogue.Models.Author;
 
+@*
 <div class="details-div">
     <div class="container pt-5">
         @if(User.IsInRole("Librarian"))
@@ -41,6 +42,53 @@
                 }
             </table>
         </div>
+        }
+    </div>
+</div>
+*@
+
+<div class="details-div">
+    <div class="container pt-5">
+        @if(User.IsInRole("Librarian"))
+        {
+            <p class="text-end">
+                <button data-bs-target="#Author_Details_Delete_@Model.AuthorId" data-bs-toggle="modal" class="btn btn-danger ml-2">Delete</button>
+            </p>
+        }
+        <h3>@Model.Name</h3>
+        <h4>Books</h4>
+
+        @if(Model.AuthorBooks != null && Model.AuthorBooks.Count > 0)
+        {
+            <div class="table-responsive mt-2">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var authorBook in Model.AuthorBooks)
+                        {
+                            <tr>
+                                <td>@authorBook.BookId</td>
+                                <td>@Html.ActionLink(authorBook.Book.Name, "Details", "Books", new { id = authorBook.BookId }, new { @class = "nav-link text-primary" })</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>No books available for this author.</p>
+             <p>@Html.ActionLink("Create a New Book", "Create", "Books", new { authorId = Model.AuthorId }, new { @class = "btn btn-primary" })</p>
+             @* EXPLANATION:
+                @Html.ActionLink: This helper generates an HTML link (<a> tag) that points to the Create action in the Books controller. It passes the current AuthorId as a parameter so that the new book can be associated with this author.
+
+                new { authorId = Model.AuthorId }: This passes the AuthorId as a query string parameter to the Create action. You can use this in the Create action to pre-fill or associate the new book with the correct author.
+             *@
         }
     </div>
 </div>
