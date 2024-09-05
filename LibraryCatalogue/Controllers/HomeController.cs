@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using LibraryCatalogue.Solution.Models;
 
-namespace LibraryCatalogue.Solution.Controllers;
+namespace LibraryCatalogue.Controllers;
 
 public class HomeController : Controller
 {

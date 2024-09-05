@@ -12,7 +12,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 
-namespace CheckoutsController;
+namespace LibraryCatalogue.Controllers;
 public class CheckoutsController : Controller
 {
     private readonly LibraryCatalogueContext _db;
@@ -40,4 +40,28 @@ public class CheckoutsController : Controller
         ViewBag.ErrorMessage = "";
         return View(model);
     }
+
+    public async Task<IActionResult> Create(int bookId)
+    {
+        var book = _db.Books.FirstOrDefault(bk => bk.BookId == bookId);
+        if(book.Copies == 0)
+        {
+            ViewBag.ErrorMessage = $"Sorry {book.Name} is finished in this library";
+            return RedirectToAction("Details", "Books", new {@id = bookId});
+        }
+        else{
+            // AN else statement to handle when there are Copies of a book in the library
+            book.Copies = book.Copies - 1;
+            _db.Entry(book).State = EntityState.Modified;
+            _db.SaveChanges();
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUser = await _userManager.FindByIdAsync(userId);
+            var checkout = new Checkout{BookId = bookId, User = currentUser, Date = DateTime.Now, Returned = false}; // setting properties of a newly instantiated Checkout object
+            _db.Checkouts.Add(checkout); // Adding the checkout into the database so it can be created
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+    }
+
+
 }

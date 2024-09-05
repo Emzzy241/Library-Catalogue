@@ -12,7 +12,7 @@
         <h3 class="mt-4">Checkouts</h3>
         @************************* All Users **************************@
 
-        @if (User.IsInRole("Liberian"))
+        @if (User.IsInRole("Librarian"))
         {
             <p class="my-3">@Html.ActionLink("All Users" , "AllCheckouts" , "Checkouts" , null , new {@class = "h6"})</p>
         }

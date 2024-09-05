@@ -10,9 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LibrariesController.Controllers;
+namespace LibraryCatalogue.Controllers;
 
-[Authorize(Roles = "Librarian")]
+// [Authorize(Roles = "Librarian")]
 public class AuthorsController : Controller
 {
     private readonly LibraryCatalogueContext _db;
