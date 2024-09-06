@@ -224,8 +224,9 @@ public class BooksController : Controller
     [HttpPost]
     public IActionResult RemoveAuthor(int AuthorBookId)
     {
-        var authorbook = _db.AuthorBooks.Find(AuthorBookId);
-        // var authorbook = _db.Books.FirstOrDefault(authb => authb.AuthorBookId = AuthorBookId);
+        // var authorbook = _db.AuthorBooks.Find(AuthorBookId);
+        // Performing comparison to determine to aid us in finding the Id of the AuthorBook that we want to delete
+        var authorbook = _db.AuthorBooks.FirstOrDefault(authb => authb.AuthorBookId == AuthorBookId);
         _db.AuthorBooks.Remove(authorbook);
         _db.SaveChanges();
         return RedirectToAction("Index");

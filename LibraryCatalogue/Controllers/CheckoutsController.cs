@@ -63,5 +63,72 @@ public class CheckoutsController : Controller
         }
     }
 
+    // AllCheckouts() action
+    // [Authorize(Roles = "Librarian")]
+    public IActionResult AllCheckouts()
+    {
+        ViewBag.ErrorMessage = "";
+        var model = _db.Checkouts
+                        .Include(checkout => checkout.Book)
+                        .Include(checkout => checkout.User)
+                        .OrderBy(checkout => checkout.Returned)
+                        .ToList();
+
+        return View(model);
+    }
+
+    // The Search() Action so users can search all of the books that they have previously checked out
+    public IActionResult Search(string userName)
+    {
+        var model = _db.Checkouts
+                        .Include(checkout => checkout.Book)
+                        .Include(checkout => checkout.User)
+                        .Where(ck => ck.User.FirstName.Contains(userName.ToLower()) || ck.User.LastName.Contains(userName.ToLower()))
+                        .OrderBy(ck => ck.Returned)
+                        .ToList();
+
+        return View("AllCheckouts",model);
+    }
+
+    // [Authorize(Roles  = "Librarian")]
+    public IActionResult Return(int checkoutId, int bookId)
+    {
+        var book = _db.Books.FirstOrDefault(bk => bk.BookId == bookId);
+        book.Copies = book.Copies + 1;
+        _db.Entry(book).State = EntityState.Modified;
+        _db.SaveChanges();
+        var checkout = _db.Checkouts.FirstOrDefault(ck => ck.CheckoutId == checkoutId);
+        checkout.Returned = true;
+        _db.Entry(checkout).State = EntityState.Modified;
+        _db.SaveChanges();
+        return RedirectToAction("AllCheckouts");
+    }
+
+    // [Authorize(Roles = "Librarian")]
+    public IActionResult Delete(int checkoutId)
+    {
+        var checkout = _db.Checkouts.FirstOrDefault(ck => ck.CheckoutId == checkoutId);
+        if(checkout.Returned != true)
+        {
+            // Allowing users delete a book only when they have returned such book 
+            ViewBag.ErrorMessage = "You cannot delete  abook without returning it!";
+            var model = _db.Checkouts
+                            .Include(ck => ck.Book)
+                            .Include(ck => ck.User)
+                            .OrderBy(ck => ck.Returned)
+                            .ToList();
+            return View(model);
+        }
+        else
+        {
+            _db.Checkouts.Remove(checkout);
+            _db.SaveChanges();
+            return RedirectToAction("AllCheckouts");
+        }
+
+    }
+
+
+
 
 }

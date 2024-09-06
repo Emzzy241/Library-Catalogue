@@ -49,12 +49,15 @@
 
 <div class="details-div">
     <div class="container pt-5">
+                <button data-bs-target="#Author_Details_Delete_@Model.AuthorId" data-bs-toggle="modal" class="btn btn-danger ml-2">Delete</button>
+        @*
         @if(User.IsInRole("Librarian"))
         {
             <p class="text-end">
                 <button data-bs-target="#Author_Details_Delete_@Model.AuthorId" data-bs-toggle="modal" class="btn btn-danger ml-2">Delete</button>
             </p>
         }
+        *@
         <h3>@Model.Name</h3>
         <h4>Books</h4>
 
