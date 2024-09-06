@@ -12,10 +12,13 @@
         <h3 class="mt-4">Checkouts</h3>
         @************************* All Users **************************@
 
+            <p class="my-3">@Html.ActionLink("All Users" , "AllCheckouts" , "Checkouts" , null , new {@class = "h6"})</p>
+        @*
         @if (User.IsInRole("Librarian"))
         {
             <p class="my-3">@Html.ActionLink("All Users" , "AllCheckouts" , "Checkouts" , null , new {@class = "h6"})</p>
         }
+        *@
         <div id="user-checkout">
             <div class="table-responsive mt-2">
                 <table class="table table-striped">

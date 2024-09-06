@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LibraryCatalogue.Models;
 
 namespace LibraryCatalogue.Models;
 public class Checkout

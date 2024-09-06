@@ -11,10 +11,13 @@
         <p class="text-danger">All books must be returned after/before one week of checkout</p>
         <p class="text-end">
             <button data-bs-target = "#Book_Checkout_@Model.BookId" data-bs-toggle = "modal" class="btn btn-dark">Checkout</button>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <button data-bs-target = "#Book_Details_Delete_@Model.BookId" data-bs-toggle = "modal" class="btn btn-danger">Delete</button>
+            @*
             @if(User.IsInRole("Librarian"))
             {
                 <button data-bs-target = "#Book_Details_Delete_@Model.BookId" data-bs-toggle = "modal" class="btn btn-danger">Delete</button>
             }
+            *@
         </p>
         <h3>@Model.Name</h3>
         <p>@Model.Description</p>
@@ -27,10 +30,13 @@
                 {
                     <div class="grid-item">
                         <h5>@authorBook.Author.Name</h5>
+                           <button class="btn btn-danger mt-3" data-bs-target="#book_details_authorbooks_delete_@authorBook.AuthorBookId" data-bs-toggle="modal">Remove</button>
+                        @*
                         @if(User.IsInRole("Librarian"))
                         {
                            <button class="btn btn-danger mt-3" data-bs-target="#book_details_authorbooks_delete_@authorBook.AuthorBookId" data-bs-toggle="modal">Remove</button>
                         }
+                        *@
                     </div>
                 }
             </div>

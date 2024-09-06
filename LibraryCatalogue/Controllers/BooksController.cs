@@ -44,7 +44,7 @@ public class BooksController : Controller
         return View(books);
     }
 
-    [Authorize(Roles = "Librarian")]
+    // [Authorize(Roles = "Librarian")]
     // The Create Action for logged in users
     public IActionResult Create()
     {
@@ -57,7 +57,7 @@ public class BooksController : Controller
         return View();
     }
 
-    [Authorize(Roles = "Librarian")]
+    
     // [HttpPost]
     // public async Task<IActionResult> Create(Book book, int AuthorId)
     // {
@@ -77,6 +77,7 @@ public class BooksController : Controller
     //     }
     // }
 
+    // [Authorize(Roles = "Librarian")]
     [HttpPost]
      public IActionResult Create(Book book , int AuthorId)
         {
@@ -102,7 +103,7 @@ public class BooksController : Controller
         return View(thisBook);
     } 
 
-    [Authorize(Roles = "Librarian")]
+    // [Authorize(Roles = "Librarian")]
     [HttpGet]
     public IActionResult Delete(int id)
     {
@@ -116,7 +117,7 @@ public class BooksController : Controller
          View(thisBook);
     }
    
-   [Authorize(Roles = "Librarian")]
+    // [Authorize(Roles = "Librarian")]
     [HttpPost, ActionName("DeleteConfirmed")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int id)
@@ -144,7 +145,7 @@ public class BooksController : Controller
     //     }
     //     return View(thisBook);
     // } or use the .Find() method
-    [Authorize(Roles = "Librarian")]
+    // [Authorize(Roles = "Librarian")]
     public IActionResult Edit(int id)
     {
         var book = _db.Books.Find(id); // Fetch the book that is being edited
@@ -161,7 +162,7 @@ public class BooksController : Controller
 
         // var authorbook = _db.AuthorBooks.FirstOrDefault(authbk => authbk.AuthorId == AuthorId && authbk.BookId = book.BookId);
     
-    [Authorize(Roles = "Librarian")]
+    // [Authorize(Roles = "Librarian")]
     // [HttpPost]
     // public IActionResult Edit(Book book, int AuthorId)
     // {
@@ -197,7 +198,7 @@ public class BooksController : Controller
     }
 
     // Implementing the AddAuthor() action
-    [Authorize(Roles = "Librarian")]
+    // [Authorize(Roles = "Librarian")]
     public IActionResult AddAuthor(int id)
     {
         var book = _db.Books.Find(id);
@@ -206,7 +207,7 @@ public class BooksController : Controller
         return View(book);
     }
 
-    [Authorize(Roles = "Librarian")]
+    // [Authorize(Roles = "Librarian")]
     [HttpPost]
     public IActionResult AddAuthor(Book book, int AuthorId)
     {
@@ -219,7 +220,7 @@ public class BooksController : Controller
         return RedirectToAction("Details", new { id = book.BookId});
     }
 
-    [Authorize(Roles = "Librarian")]
+    // [Authorize(Roles = "Librarian")]
     [HttpPost]
     public IActionResult RemoveAuthor(int AuthorBookId)
     {

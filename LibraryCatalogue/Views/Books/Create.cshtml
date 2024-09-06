@@ -19,6 +19,13 @@
                 @Html.LabelFor(model => model.Description , new {@class = "form-label h6"})
                 @Html.TextAreaFor(model => model.Description , new {@class = "form-control"})
             </div>
+
+    <div class="form-group mt-3">
+        @Html.LabelFor(model => model.Copies, new {@class = "form-label h6"})
+        @Html.TextBoxFor(model => model.Copies, new {@class = "form-control"})
+    </div>
+
+        
         <br />
   <div class="form-group mt-3">
                 @Html.Label("Author" , null , new {@class = "form-label h6"})

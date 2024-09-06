@@ -1,0 +1,3 @@
+Problem 1: When I sign in to multiple accounts, UserA can see all the books that userB created
+Problem 2: Understanding How Authorization actually works, understanding how we assign Roles in C# with Entity Framework
+Problem 3: User Access keeps getting denied.
