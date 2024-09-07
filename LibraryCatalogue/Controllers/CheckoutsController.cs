@@ -78,6 +78,7 @@ public class CheckoutsController : Controller
     }
 
     // The Search() Action so users can search all of the books that they have previously checked out
+    [HttpPost]
     public IActionResult Search(string userName)
     {
         var model = _db.Checkouts
@@ -87,11 +88,12 @@ public class CheckoutsController : Controller
                         .OrderBy(ck => ck.Returned)
                         .ToList();
 
-        return View("AllCheckouts",model);
+        return View("AllCheckouts", model);
     }
 
+
     // [Authorize(Roles  = "Librarian")]
-    public IActionResult Return(int checkoutId, int bookId)
+    public IActionResult ReturnBook(int checkoutId, int bookId)
     {
         var book = _db.Books.FirstOrDefault(bk => bk.BookId == bookId);
         book.Copies = book.Copies + 1;
@@ -111,13 +113,13 @@ public class CheckoutsController : Controller
         if(checkout.Returned != true)
         {
             // Allowing users delete a book only when they have returned such book 
-            ViewBag.ErrorMessage = "You cannot delete  abook without returning it!";
+            ViewBag.ErrorMessage = "You cannot delete  a book without returning it!";
             var model = _db.Checkouts
                             .Include(ck => ck.Book)
                             .Include(ck => ck.User)
                             .OrderBy(ck => ck.Returned)
                             .ToList();
-            return View(model);
+            return View("AllCheckouts", model);
         }
         else
         {

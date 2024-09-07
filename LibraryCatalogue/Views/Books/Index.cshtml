@@ -1,36 +1,3 @@
-@*
-
-@{
-    ViewData["Title"] = "Books";
-    Layout = "_Layout";
-}
-@using LibraryCatalogue.Models;
-
-<h2>Dynasty's Library</h2>
-<br />
-<h4>Here is a list of all the Books currently added:</h4>
-<br />
-<br />
-
-@if(@Model.Count == 0)
-{
-    <p>No Books have been added yet!</p>
-}
-else{
-    @foreach(Book book in Model)
-    {
-        <p>@Html.ActionLink(@book.Name, "Details", new {id = @book.BookId})</p>
-    }
-}
-
-<br />
-<br />
-<br />
-<p class="text-center">@Html.ActionLink("Create a Book Now", "Create", "Books")</p>
-
-*@
-
-
 @{
     ViewData["Title"] = "Books";
     Layout = "_Layout";
@@ -38,10 +5,14 @@ else{
 
 @using LibraryCatalogue.Models;
 @using System.Collections.Generic;
+
 @model List<LibraryCatalogue.Models.Book>;
 
 <div class="books-div">
     <div class="container">
+    
+        <h2>Dynasty's Library</h2>
+        <br />
         <h3 class="text-center mt-4">Here are the available books</h3>
         <div class="search-div">
             @using (Html.BeginForm("Search", "Books", FormMethod.Post))
@@ -80,7 +51,14 @@ else{
                                 <td>
                                     @Html.ActionLink("Details", "Details", new { id = book.BookId })
                                     
-                                    @* Uncomment this section if using role-based access control for actions *@
+                                        <span> |</span>
+                                        @Html.ActionLink("Edit", "Edit", new { id = book.BookId })
+                                        <span> |</span>
+                                        <button data-bs-target="#Book_Delete_@book.BookId" data-bs-toggle="modal" class="btn text-danger">Delete</button>
+                                    
+
+
+                                    @* Uncomment this section if using role-based access control for actions 
                                     
                                     @if (User.IsInRole("Librarian"))
                                     {
@@ -89,6 +67,8 @@ else{
                                         <span> |</span>
                                         <button data-bs-target="#Book_Delete_@book.BookId" data-bs-toggle="modal" class="btn text-danger">Delete</button>
                                     }
+
+                                    *@
                                     
 
                                     @* Temporarily showing all actions for testing purposes *@
@@ -103,12 +83,12 @@ else{
                 }
             </table>
         </div>
-        @* Uncomment when role-based access is implemented *@
         
+        @* Uncomment when role-based access is implemented 
         @if (User.IsInRole("Librarian"))
         {
             <p class="text-end mt-2">@Html.ActionLink("New", "Create", null, new { @class = "btn btn-outline-dark" })</p>
-        }
+        }*@
         
         <p class="text-end mt-2">@Html.ActionLink("New", "Create", null, new { @class = "btn btn-outline-dark" })</p>
     </div>
