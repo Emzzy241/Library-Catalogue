@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering; // namespace for importing the SelectList()
 using LibraryCatalogue.Models;
 using LibraryCatalogue.ViewModels;
 using System.Threading.Tasks;
@@ -54,7 +55,8 @@ public class AccountController : Controller
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
             if(result.Succeeded)
             {
-                ViewBag.AccountType = new SelectList(_db.AccountTypes, "TypeId", "Name");
+                // Adding this line in a bid to show a select list of the accunt types that my users can be able to create
+                // ViewBag.AccountType = new SelectList(_db.AccountTypes, "TypeId", "Name");
 
                 await _userManager.AddToRoleAsync(user, "Patron");
                 return RedirectToAction("Login");
