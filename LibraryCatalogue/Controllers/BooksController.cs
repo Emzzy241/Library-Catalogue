@@ -77,7 +77,8 @@ public class BooksController : Controller
     //     }
     // }
 
-    // [Authorize(Roles = "Librarian")]
+    // Writing code for the User story: As a librarian, I want to be able to create books
+    [Authorize(Roles = "Librarian")]
     [HttpPost]
      public IActionResult Create(Book book , int AuthorId)
         {

@@ -44,10 +44,12 @@ namespace LibraryCatalogue;
                 .AddDefaultTokenProviders();
 
         // WORKING WITH USER ROLES IN APP
-        builder.Services.AddAuthorization(
+        builder.Services.AddAuthorization( options =>
+        {
           options.AddPolicy("LibrarianPolicy", policy => policy.RequireRole("Librarian"));
-          options.AddPolicy("PatrinPolicy", => policy => policy.RequireRole("Patron"));
-        );
+          options.AddPolicy("PatrinPolicy", policy => policy.RequireRole("Patron"));
+
+        });
 
         // Default Password settings.
       /* builder.Services.Configure<IdentityOptions>(options =>
@@ -125,30 +127,40 @@ namespace LibraryCatalogue;
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<LibraryUser>>();
 
         string[] roleNames = {"Librarian", "Patron"};
-        foreach (var roleName in roleNames)
+
+        // Wriitng a Method for dsetermining whether a certain role exists 
+        async void  RoleDecider()
         {
-            var roleExists = await roleManager.RoleExistsAsync(roleName);
-            if(!roleExists)
-            {
-                await roleManager.CreateAsync(new IdentityRole(roleName));
-            }
+          foreach (var roleName in roleNames)
+          {
+              var roleExists = await roleManager.RoleExistsAsync(roleName);
+              if(!roleExists)
+              {
+                  await roleManager.CreateAsync(new IdentityRole(roleName));
+              }
+          }
+          
         }
 
         // Optionally create a default Library user
-        var librarianUser = await userManager.FindByEmailAsync("librarian@library.com");
-        if (librarianUser == null)
-        {
-            var librarian = new ApplicationUser
-            {
-                UserName = "librarian@library.com",
-                Email = "librarian@library.com"
-            };
-            var result = await userManager.CreateAsync(librarian, "Librarian123!");
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(librarian, "Librarian");
-            }
-        }
+        // async void DefaultUser()
+        // {
+        //     var librarianUser = await userManager.FindByEmailAsync("librarian@library.com");
+        //     if (librarianUser == null)
+        //     {
+        //         var librarian = new ApplicationUser
+        //         {
+        //             UserName = "librarian@library.com",
+        //             Email = "librarian@library.com"
+        //         };
+        //         var result = await userManager.CreateAsync(librarian, "Librarian123!");
+        //         if (result.Succeeded)
+        //         {
+        //             await userManager.AddToRoleAsync(librarian, "Librarian");
+        //         }
+        //     }
+        // }
+
 
       app.Run();
     }

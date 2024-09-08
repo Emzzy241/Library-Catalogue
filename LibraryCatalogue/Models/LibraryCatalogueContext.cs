@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using LibraryCatalogue.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace LibraryCatalogue.Models;
 
