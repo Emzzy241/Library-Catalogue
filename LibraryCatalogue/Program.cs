@@ -88,11 +88,8 @@ namespace LibraryCatalogue;
         /*
             Purpose of app.UseHsts();
             When you add app.UseHsts(); to your middleware pipeline:
-
             Enforces HTTPS: HSTS instructs the browser to always use HTTPS instead of HTTP for all subsequent requests to the web application. Once HSTS is enabled, if a user tries to connect to your website over HTTP, the browser will automatically switch to HTTPS.
-
             Prevents Protocol Downgrade Attacks: HSTS helps prevent attackers from tricking a user’s browser into using a less secure HTTP connection, which can be exploited for man-in-the-middle (MITM) attacks.
-
             Instructs the Browser to Cache the HTTPS Policy: The browser caches the HSTS policy for a specified period (the "max-age"), which means that even if a user manually tries to connect via HTTP, the browser will still use HTTPS.
     */
     }
@@ -116,74 +113,3 @@ namespace LibraryCatalogue;
       app.Run();
     }
   }
-
-
-/* using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using LibraryCatalogue.Models;
-using Microsoft.AspNetCore.Identity;
-
-// namespace LibraryCatalogue.Models;
-// public class Program
-// {
-//     public static void Main(string[] args)
-//     {
-//         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-//         builder
-//     }
-// }
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-// Register the DbContext with dependency injection
-builder.Services.AddDbContext<LibraryCatalogueContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Register ASP.NET Core Identity services
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<LibraryCatalogueContext>();
-
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-    /*
-        Purpose of app.UseHsts();
-        When you add app.UseHsts(); to your middleware pipeline:
-
-        Enforces HTTPS: HSTS instructs the browser to always use HTTPS instead of HTTP for all subsequent requests to the web application. Once HSTS is enabled, if a user tries to connect to your website over HTTP, the browser will automatically switch to HTTPS.
-
-        Prevents Protocol Downgrade Attacks: HSTS helps prevent attackers from tricking a user’s browser into using a less secure HTTP connection, which can be exploited for man-in-the-middle (MITM) attacks.
-
-        Instructs the Browser to Cache the HTTPS Policy: The browser caches the HSTS policy for a specified period (the "max-age"), which means that even if a user manually tries to connect via HTTP, the browser will still use HTTPS.
-   
-}
-else
-{
-    // Don't enable HSTS in development
-    app.UseDeveloperExceptionPage();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthentication(); // Add this line to enable authentication services
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
- */
