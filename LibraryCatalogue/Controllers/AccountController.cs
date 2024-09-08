@@ -54,6 +54,8 @@ public class AccountController : Controller
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
             if(result.Succeeded)
             {
+                ViewBag.AccountType = new SelectList(_db.AccountTypes, "TypeId", "Name");
+
                 await _userManager.AddToRoleAsync(user, "Patron");
                 return RedirectToAction("Login");
             }
