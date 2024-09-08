@@ -5,7 +5,7 @@ using LibraryCatalogue.Models;
 
 namespace LibraryCatalogue.Models;
 
-public class LibraryCatalogueContext : IdentityDbContext<LibraryUser>
+public class LibraryCatalogueContext : IdentityDbContext<LibraryUser, IdentityRole, string>
 {
     // Creating the database tables for my application
     public DbSet<Book> Books { get; set; }

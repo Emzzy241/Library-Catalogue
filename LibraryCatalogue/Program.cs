@@ -15,6 +15,7 @@ namespace LibraryCatalogue;
 
       builder.Services.AddControllersWithViews();
 
+    // Configure entity framework and Identity
       builder.Services.AddDbContext<LibraryCatalogueContext>(
                         dbContextOptions => dbContextOptions
                           .UseMySql(
@@ -36,10 +37,17 @@ namespace LibraryCatalogue;
       builder.Services.AddEntityFrameworkMySql();
       // override Identity's default settings by configuring our Identity service
 
+      // Add identity and role services
       builder.Services.AddIdentity<LibraryUser, IdentityRole>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<LibraryCatalogueContext>()
                 .AddDefaultTokenProviders();
+
+        // WORKING WITH USER ROLES IN APP
+        builder.Services.AddAuthorization(
+          options.AddPolicy("LibrarianPolicy", policy => policy.RequireRole("Librarian"));
+          options.AddPolicy("PatrinPolicy", => policy => policy.RequireRole("Patron"));
+        );
 
         // Default Password settings.
       /* builder.Services.Configure<IdentityOptions>(options =>
@@ -109,6 +117,38 @@ namespace LibraryCatalogue;
           name: "default",
           pattern: "{controller=Home}/{action=Index}/{id?}"
         );
+
+        // Configure Role Management
+        // Seed roles into your application during startup to ensure you have a "Librarian" and "Patron" role from the beginning.
+        var scope = app.Services.CreateScope();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<LibraryUser>>();
+
+        string[] roleNames = {"Librarian", "Patron"};
+        foreach (var roleName in roleNames)
+        {
+            var roleExists = await roleManager.RoleExistsAsync(roleName);
+            if(!roleExists)
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+        }
+
+        // Optionally create a default Library user
+        var librarianUser = await userManager.FindByEmailAsync("librarian@library.com");
+        if (librarianUser == null)
+        {
+            var librarian = new ApplicationUser
+            {
+                UserName = "librarian@library.com",
+                Email = "librarian@library.com"
+            };
+            var result = await userManager.CreateAsync(librarian, "Librarian123!");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(librarian, "Librarian");
+            }
+        }
 
       app.Run();
     }
