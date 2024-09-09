@@ -38,6 +38,9 @@ public class BooksController : Controller
     //                             .ToList();
     //     return View(userBooks);
     // }
+
+    // Every one can view the list of books
+    [AllowAnonymous]
      public IActionResult Index()
     {
         List<Book> books= _db.Books.Include(books => books.AuthorBooks).ThenInclude(authorbook => authorbook.Author).ToList();
@@ -45,6 +48,9 @@ public class BooksController : Controller
     }
 
     // [Authorize(Roles = "Librarian")]
+
+    // Only Librarians or Admins can create books
+    [Authorize(Roles = "Librarian,Admin")]
     // The Create Action for logged in users
     public IActionResult Create()
     {
@@ -77,8 +83,8 @@ public class BooksController : Controller
     //     }
     // }
 
-    // Writing code for the User story: As a librarian, I want to be able to create books
-    [Authorize(Roles = "Librarian")]
+    // Only Librarians or Admins can create books
+    [Authorize(Roles = "Librarian,Admin")]
     [HttpPost]
      public IActionResult Create(Book book , int AuthorId)
         {
@@ -93,6 +99,7 @@ public class BooksController : Controller
         }
 
     // The Read Action for all users irrespective of logging in
+    [AllowAnonymous]
     public ActionResult Details(int id)
     {
         // Displaying a Book's details to all users
@@ -103,8 +110,8 @@ public class BooksController : Controller
                         .FirstOrDefault(book => book.BookId == id);
         return View(thisBook);
     } 
-
-    // [Authorize(Roles = "Librarian")]
+    // Only Librarians or Admins can Delete books
+    [Authorize(Roles = "Librarian,Admin")]
     [HttpGet]
     public IActionResult Delete(int id)
     {
@@ -117,8 +124,8 @@ public class BooksController : Controller
         return
          View(thisBook);
     }
-   
-    // [Authorize(Roles = "Librarian")]
+       // Only Librarians or Admins can delete books
+    [Authorize(Roles = "Librarian,Admin")]
     [HttpPost, ActionName("DeleteConfirmed")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int id)
@@ -146,7 +153,9 @@ public class BooksController : Controller
     //     }
     //     return View(thisBook);
     // } or use the .Find() method
-    // [Authorize(Roles = "Librarian")]
+
+        // Only Librarians or Admins can edit books
+    [Authorize(Roles = "Librarian,Admin")]
     public IActionResult Edit(int id)
     {
         var book = _db.Books.Find(id); // Fetch the book that is being edited
@@ -181,6 +190,8 @@ public class BooksController : Controller
     //     return View(book);
     // }
 
+        // Only Librarians or Admins can edit books
+    [Authorize(Roles = "Librarian,Admin")]
     [HttpPost]
     public IActionResult Edit(Book book, int AuthorId)
     {
@@ -199,7 +210,8 @@ public class BooksController : Controller
     }
 
     // Implementing the AddAuthor() action
-    // [Authorize(Roles = "Librarian")]
+        // Only Librarians or Admins can add author
+    [Authorize(Roles = "Librarian,Admin")]
     public IActionResult AddAuthor(int id)
     {
         var book = _db.Books.Find(id);
@@ -208,7 +220,8 @@ public class BooksController : Controller
         return View(book);
     }
 
-    // [Authorize(Roles = "Librarian")]
+    // Only Librarians or Admins can add an author
+    [Authorize(Roles = "Librarian,Admin")]
     [HttpPost]
     public IActionResult AddAuthor(Book book, int AuthorId)
     {
@@ -220,8 +233,8 @@ public class BooksController : Controller
         _db.SaveChanges();
         return RedirectToAction("Details", new { id = book.BookId});
     }
-
-    // [Authorize(Roles = "Librarian")]
+    // Only Librarians or Admins can remove an author
+    [Authorize(Roles = "Librarian,Admin")]
     [HttpPost]
     public IActionResult RemoveAuthor(int AuthorBookId)
     {
@@ -234,6 +247,8 @@ public class BooksController : Controller
     }
 
     // Implementing the Search Feature so a librarian can search for a book by author or title, so that Librarian can find a book when there are a lot of books in the library
+    // All users can search for a book
+    [AllowAnonymous]
     [HttpPost]
     public IActionResult Search(string bookName)
     {

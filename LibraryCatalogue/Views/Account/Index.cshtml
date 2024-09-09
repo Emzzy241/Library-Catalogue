@@ -12,10 +12,18 @@
     {
         <input type="submit" class="btn btn-primary" value ="Log Out"/>
         
+        @*
+            Showing actions users can perform Depending on the account type
+        *@
+
+        @if(User.IsInRole("Librarian" ) || User.IsInRole("Admin"))
+        {
         
-        <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
-        <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
-        <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
+            <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
+            <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
+            <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
+
+        }
     }
 }
 else{

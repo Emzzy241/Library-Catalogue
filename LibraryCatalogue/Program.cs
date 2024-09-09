@@ -126,7 +126,7 @@ namespace LibraryCatalogue;
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<LibraryUser>>();
 
-        string[] roleNames = {"Librarian", "Patron"};
+        string[] roleNames = {"Librarian", "Patron", "Admin"};
 
         // Wriitng a Method for dsetermining whether a certain role exists 
         async void  RoleDecider()

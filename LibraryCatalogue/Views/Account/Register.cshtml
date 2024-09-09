@@ -49,13 +49,17 @@
     <br />
 
     @* ADDING the code below in a bid to allow users select the account type that they want
-    <div class="form-group">
-        @Html.Label("Account Type", null, new {@class="form-control h6"})
-        @Html.DropDownList("AccountType", null, null, new {@class = "form-control"})
+     *@
+     
+     <div class="form-group">
+        <label for="Role">Select Account Type</label>
+        <select class="form-control" id="Role" name="Role">
+            <option value="Librarian">Librarian</option>
+            <option value="Patron">Patron</option>
+        </select>
     </div>
-    <br />
 
-    *@
+   
 
     <div class="text-center">
         <input type="submit" value="Register" class="btn btn-primary"/>

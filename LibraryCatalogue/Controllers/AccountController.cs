@@ -55,11 +55,24 @@ public class AccountController : Controller
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
             if(result.Succeeded)
             {
-                // Adding this line in a bid to show a select list of the accunt types that my users can be able to create
-                // ViewBag.AccountType = new SelectList(_db.AccountTypes, "TypeId", "Name");
+                // await _userManager.AddToRoleAsync(user, "Patron");
+                // return RedirectToAction("Login");
+                
+                // Checking if its the admin account
+                if(user.Email == "admin@library.com")
+                {
+                    await _userManager.AddToRoleAsync(user, "Admin");
+                }
+                else{
+                    // Once the inputted email is not the admin's email, We assign role based on the option selected from the dropdown by user
+                    await _userManager.AddToRoleAsync(user, model.Role);
 
-                await _userManager.AddToRoleAsync(user, "Patron");
-                return RedirectToAction("Login");
+                }
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+
+
             }
             else
             {
@@ -70,6 +83,9 @@ public class AccountController : Controller
                 return View(model);
             }
         }
+
+         // If we got this far, something failed; redisplay form
+        return View(model);
     }
 
     // THe HttpPost for user's logging in
