@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq; // For accessing the .ToList() method that is capable of converting IList<T> to List<T>. The ToList() method can also convert items in ou rdatabase into a C# List<T>
 using LibraryCatalogue.ViewModels;
 
 
@@ -22,6 +22,7 @@ public class AdminController : Controller
     {
         _userManager = userManager;
     }
+    // @**@
 
     public async Task<IActionResult> ManageUsers()
     {
@@ -31,10 +32,11 @@ public class AdminController : Controller
         foreach (var user in users)
         {
             var roles = await _userManager.GetRolesAsync(user);
+            var roleList = roles.ToList(); // Explicit conversion from IList<string> to List<string>
             model.Add(new RegisterViewModel
             {
                 Email = user.Email,
-                Roles = roles
+                Roles = roleList
             });
         }
 

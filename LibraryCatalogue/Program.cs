@@ -142,6 +142,8 @@ namespace LibraryCatalogue;
           
         }
 
+        RoleDecider();
+
         // Optionally create a default Library user
         // async void DefaultUser()
         // {
