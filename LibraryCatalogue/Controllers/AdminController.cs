@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LibraryCatalogue.ViewModels;
 
 
 namespace LibraryCatalogue.Controllers;
@@ -25,12 +26,12 @@ public class AdminController : Controller
     public async Task<IActionResult> ManageUsers()
     {
         var users = await _userManager.Users.ToListAsync();
-        var model = new List<UserViewModel>();
+        var model = new List<RegisterViewModel>();
 
         foreach (var user in users)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            model.Add(new UserViewModel
+            model.Add(new RegisterViewModel
             {
                 Email = user.Email,
                 Roles = roles

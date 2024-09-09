@@ -53,26 +53,24 @@ public class AccountController : Controller
             
             var user = new LibraryUser{ UserName = model.Email, FirstName = model.FirstName, LastName = model.LastName };
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
-            if(result.Succeeded)
+             if (result.Succeeded)
             {
-                // await _userManager.AddToRoleAsync(user, "Patron");
-                // return RedirectToAction("Login");
-                
-                // Checking if its the admin account
-                if(user.Email == "admin@library.com")
+                // Check for admin role and restrict it to a specific email
+                if (model.SelectedRole == "Admin" && model.Email == "admin@example.com")
                 {
                     await _userManager.AddToRoleAsync(user, "Admin");
                 }
-                else{
-                    // Once the inputted email is not the admin's email, We assign role based on the option selected from the dropdown by user
-                    await _userManager.AddToRoleAsync(user, model.Role);
-
+                else if (model.SelectedRole == "Librarian")
+                {
+                    await _userManager.AddToRoleAsync(user, "Librarian");
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, "Patron");
                 }
 
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
-
-
+                // Continue with other registration logic
+                // Redirect to appropriate page
             }
             else
             {
