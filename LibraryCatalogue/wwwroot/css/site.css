@@ -27,6 +27,12 @@ body {
   width: 100%;
 }
 
+.links-grid3{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
