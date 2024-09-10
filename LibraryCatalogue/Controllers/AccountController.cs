@@ -51,7 +51,14 @@ public class AccountController : Controller
         {
             // ApplicationUser user = new ApplicationUser { UserName = model.Email };
             
-            var user = new LibraryUser{ UserName = model.Email, FirstName = model.FirstName, LastName = model.LastName };
+            var user = new LibraryUser
+            { 
+                UserName = model.Email, 
+                Email = model.Email,
+                FirstName = model.FirstName, 
+                LastName = model.LastName 
+            };
+            // The actual requirement that we ned fo ruser to be able to create an account on our app, these 2 requirements is just an email and a password
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
              if (result.Succeeded)
             {

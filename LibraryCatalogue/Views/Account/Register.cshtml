@@ -54,12 +54,16 @@
      *@
      
      <div class="form-group">
-        <label for="Role">Select Account Type</label>
-        <select class="form-control" id="Role" name="Role">
-            <option value="Librarian">Librarian</option>
-            <option value="Patron">Patron</option>
-            <option value="Admin">Admin</option>
+        <div>
+        @*
+            Ensuring the frontend communicates with the backend... modifying thr form to ensure the selected AccountType is correctly posted to the backend
+        *@
+        <label asp-for="SelectedAccountType"></label>
+        <select asp-for="SelectedAccountType" asp-items="@(new SelectList(Model.AccountTypes))">
+            <option value="">-- Select Account Type --</option>
         </select>
+        <span asp-validation-for="SelectedAccountType"></span>
+    </div>
     </div>
     <br />  
 

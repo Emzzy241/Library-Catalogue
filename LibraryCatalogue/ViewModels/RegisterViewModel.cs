@@ -30,10 +30,10 @@ public class RegisterViewModel
     public string ConfirmPassword { get; set; }
 
     // Update the AccountType to support selecting from predefined roles
-    [Required(ErrorMessage = "Please select an account type.")]
+    [Required(ErrorMessage = "Please select an account type. Note, regular users can't select admin account")]
     [Display(Name = "Select the type of account you would like to create: ")]
-    public string SelectedRole { get; set; }
+    public string SelectedAccountType { get; set; }
 
     // Provide a list of roles to choose from
-    public List<string> Roles { get; set; } = new List<string> { "Librarian", "Patron", "Admin" };
+    public List<string> AccountTypes { get; set; } = new List<string> { "Admin", "Librarian", "Patron" };
 }

@@ -6,8 +6,9 @@ using LibraryCatalogue.Models;
 namespace LibraryCatalogue.Models;
 public class AccountType : IdentityUser
 {
-    public string Librarian { get; set; }
-    public string Patron { get; set; }
-    public string Admin { get; set; }    
+    // Giving the properties a default value to ensure the AccountType entity represents the roles(Admin, Librarian, Patron)
+    public string Librarian { get; set; } = "Librarian";
+    public string Patron { get; set; } = "Patron";
+    public string Admin { get; set; } = "Admin";
     
 }
