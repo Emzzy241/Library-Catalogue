@@ -58,11 +58,11 @@
         @*
             Ensuring the frontend communicates with the backend... modifying thr form to ensure the selected AccountType is correctly posted to the backend
         *@
-        <label asp-for="SelectedAccountType"></label>
-        <select asp-for="SelectedAccountType" asp-items="@(new SelectList(Model.AccountTypes))">
+        <label asp-for="SelectedRole"></label>
+        <select asp-for="SelectedRole" asp-items="@(new SelectList(Model.Roles))">
             <option value="">-- Select Account Type --</option>
         </select>
-        <span asp-validation-for="SelectedAccountType"></span>
+        <span asp-validation-for="SelectedRole"></span>
     </div>
     </div>
     <br />  
