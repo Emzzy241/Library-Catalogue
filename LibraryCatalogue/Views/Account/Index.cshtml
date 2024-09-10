@@ -11,17 +11,43 @@
     @using (Html.BeginForm("LogOff", "Account"))
     {
         <input type="submit" class="btn btn-primary" value ="Log Out"/>
-        
+        <br />
+        <br />
         @*
             Showing actions users can perform Depending on the account type
         *@
 
-        @if(User.IsInRole("Librarian" ) || User.IsInRole("Admin"))
+        @if(User.IsInRole("Librarian"))
         {
-        
-            <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
-            <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
-            <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
+            <p>This is a Librarian Account and here are some of the actions you can perform as a Librarian</p>
+           <div class="links-grid">
+                <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
+                <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
+                <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
+           </div>
+        }
+
+        @if(User.IsInRole("Admin"))
+        {
+            <p><strong>You are an Admin, and these are all the actions that you can perform</strong></p>
+            <div class="links-grid">
+                <p>@Html.ActionLink("Manage Users", "ManageUsers", "Admin")</p>
+                <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
+                <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
+                <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
+            </div>
+        }
+
+        @if(User.IsInRole("Patron"))
+        {
+            <p>This is a Patron Account and it is a very limited account</p>
+            <p>Here are some of the actions that you can perform with this account: </p>
+
+            <div>
+                <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
+                <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
+            
+            </div>
         }
     }
 }
@@ -29,4 +55,4 @@ else{
     <p>@Html.ActionLink("Register", "Register")</p>
     <p>@Html.ActionLink("Log in", "Login")</p>
 }
-<p>@Html.ActionLink("Home", "Index", "Home")</p>
+<p class="text-center">@Html.ActionLink("Home", "Index", "Home")</p>

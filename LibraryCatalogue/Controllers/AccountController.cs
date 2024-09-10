@@ -77,7 +77,7 @@ public class AccountController : Controller
         if (result.Succeeded)
         {
             // Check if the selected role is 'Admin', and restrict it to a specific email
-            if (model.SelectedRole == "Admin" && model.Email == "emzzyoluwole@gmail.com")
+            if (model.SelectedRole == "Admin" && model.Email == "admin@dynalibrary.com")
             {
                 await _userManager.AddToRoleAsync(user, "Admin");
             }

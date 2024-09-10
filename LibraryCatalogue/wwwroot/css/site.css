@@ -6,12 +6,6 @@ html {
   font-size: 14px;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
 html {
   position: relative;
   min-height: 100%;
@@ -20,6 +14,22 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.links-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+
+
+
 /* 
 .text-color{
   color: #fff;
