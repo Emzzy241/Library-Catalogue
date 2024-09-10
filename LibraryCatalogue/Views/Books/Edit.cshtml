@@ -22,6 +22,10 @@
                 @Html.LabelFor(model => model.Name, new { @class = "form-label h6" })
                 @Html.TextBoxFor(model => model.Name, new { @class = "form-control text-center" })
             </div>
+             <div class="form-group mt-3">
+                @Html.LabelFor(model => model.Copies, new {@class = "form-label h6"})
+                @Html.TextBoxFor(model => model.Copies, new {@class = "form-control"})
+            </div>
             <div class="form-group mt-3 text-center">
                 @Html.Label("Author", null, new { @class = "form-label h6" })
                 @Html.DropDownList("AuthorId", ViewBag.AuthorId as SelectList, "Select an Author", new { @class = "form-control text-center" })
