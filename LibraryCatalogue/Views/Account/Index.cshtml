@@ -6,7 +6,7 @@
 <hr />
 @if(User.Identity.IsAuthenticated)
 {
-    <p>Hello @User.Identity.Name!</p>
+    <p>Hello <b>@User.Identity.Name! </b></p>
     <p>You are currently logged in</p>
     @using (Html.BeginForm("LogOff", "Account"))
     {

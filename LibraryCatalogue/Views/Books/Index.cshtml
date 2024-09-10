@@ -13,6 +13,8 @@
     
         <h2>Dynasty's Library</h2>
         <br />
+        <p>@Html.ActionLink("Click to see who is currently logged in ", "Index", "Account")</p>
+        <br />
         <h3 class="text-center mt-4">Here are the available books</h3>
         <div class="search-div">
             @using (Html.BeginForm("Search", "Books", FormMethod.Post))

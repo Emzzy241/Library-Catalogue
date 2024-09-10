@@ -98,7 +98,7 @@ public class BooksController : Controller
             return RedirectToAction("Index");
         }
 
-    // The Read Action for all users irrespective of logging in
+    // The Read Action for all users whether they be librarian, patron or admin
     [AllowAnonymous]
     public ActionResult Details(int id)
     {
@@ -220,7 +220,7 @@ public class BooksController : Controller
         return View(book);
     }
 
-    // Only Librarians or Admins can add an author
+    // Only Librarians or Admins can enter multiple authors for a book
     [Authorize(Roles = "Librarian,Admin")]
     [HttpPost]
     public IActionResult AddAuthor(Book book, int AuthorId)
@@ -247,8 +247,8 @@ public class BooksController : Controller
     }
 
     // Implementing the Search Feature so a librarian can search for a book by author or title, so that Librarian can find a book when there are a lot of books in the library
-    // All users can search for a book
-    [AllowAnonymous]
+    // Only Librarian and Admin accounts can search for a book
+    [Authorize(Roles = "Librarian, Admin")]
     [HttpPost]
     public IActionResult Search(string bookName)
     {
