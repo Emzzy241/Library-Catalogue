@@ -21,7 +21,7 @@
         @if(User.IsInRole("Librarian"))
         {
             <p><strong>This is a Librarian Account and here are some of the actions you can perform as a Librarian</strong></p>
-           <div class="links-grid">
+           <div class="links-grid3 text-center">
                 <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
                 <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
                 <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
@@ -44,7 +44,7 @@
             <p><strong>This is a Patron Account and it is a very limited account</strong></p>
             <p>Here are some of the actions that you can perform with this account: </p>
 
-            <div>
+            <div class="links-grid2">
                 <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
                 <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
             
