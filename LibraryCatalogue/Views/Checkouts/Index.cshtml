@@ -11,10 +11,10 @@
     <div class="container text-center">
         <h3 class="mt-4">Checkouts</h3>
         <br />
+           <div class="links-grid2">
                 <p>@Html.ActionLink("Click to see who is currently logged in ", "Index", "Account")</p>
-                <br />
-       
-            <p class="my-3">@Html.ActionLink("All Checkouts" , "AllCheckouts" , "Checkouts" , null , new {@class = "h6"})</p>
+                <p class="my-3">@Html.ActionLink("All Checkouts by current user" , "AllCheckouts" , "Checkouts" , null , new {@class = "h6"})</p>
+           </div>
         @*
         @if (User.IsInRole("Librarian"))
         {
@@ -54,7 +54,7 @@
                 </table>
             </div>
         <br />
-        <div class="link-grid">
+        <div class="links-grid2">
             <p>@Html.ActionLink("Click to see Author's list", "Index", "Authors")</p>
             <p>@Html.ActionLink("Click to see Book's list", "Index", "Books")</p>
         </div>
