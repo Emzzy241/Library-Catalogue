@@ -1,5 +1,6 @@
 @{
     Layout = "_Layout";
+    ViewData["Title"] = "Viewing Account";
 }
 
 <h2>Library Catalogue Application</h2>
@@ -19,7 +20,7 @@
 
         @if(User.IsInRole("Librarian"))
         {
-            <p>This is a Librarian Account and here are some of the actions you can perform as a Librarian</p>
+            <p><strong>This is a Librarian Account and here are some of the actions you can perform as a Librarian</strong></p>
            <div class="links-grid">
                 <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
                 <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
@@ -40,7 +41,7 @@
 
         @if(User.IsInRole("Patron"))
         {
-            <p>This is a Patron Account and it is a very limited account</p>
+            <p><strong>This is a Patron Account and it is a very limited account</strong></p>
             <p>Here are some of the actions that you can perform with this account: </p>
 
             <div>

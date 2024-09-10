@@ -10,6 +10,9 @@
 <div class="checkouts-div">
     <div class="container text-center">
         <h3 class="mt-4">Checkouts</h3>
+        <br />
+                <p>@Html.ActionLink("Click to see who is currently logged in ", "Index", "Account")</p>
+                <br />
         @************************* All Users **************************@
 
             <p class="my-3">@Html.ActionLink("All Users" , "AllCheckouts" , "Checkouts" , null , new {@class = "h6"})</p>

@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Books";
+    ViewData["Title"] = "All Books";
     Layout = "_Layout";
 }
 
@@ -88,6 +88,9 @@
         }*@
         
         <p class="text-end mt-2">@Html.ActionLink("New", "Create", null, new { @class = "btn btn-outline-dark" })</p>
+        <p><strong>Note, you need to create an author first before creating a book</strong></p>
+        <p>@Html.ActionLink("Click to Create Author", "Create", "Authors")</p>
+   
     </div>
 </div>
 
