@@ -8,6 +8,8 @@
 
 <h2>Register a new user </h2>
 <hr />
+<br />
+<p class="text-danger">Please note that Admin accounts are not available to regular users</p>
 
 @if(!ViewData.ModelState. IsValid)
 {
@@ -56,10 +58,10 @@
         <select class="form-control" id="Role" name="Role">
             <option value="Librarian">Librarian</option>
             <option value="Patron">Patron</option>
+            <option value="Admin">Admin</option>
         </select>
     </div>
-
-   
+    <br />  
 
     <div class="text-center">
         <input type="submit" value="Register" class="btn btn-primary"/>
