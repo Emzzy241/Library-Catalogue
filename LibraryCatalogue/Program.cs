@@ -177,6 +177,32 @@ In the Program.cs file, find the part where the authentication cookie is configu
         //     }
         // }
 
+        // This setup tells the application to redirect to the /Error/{0} page when an error occurs, where {0} is replaced by the HTTP status code.
+        // app.UseStatusCodePagesWithReExecute("/Error/{0}");
+        // Or we can choose to handle each error and create multiple Razor pages for each error
+
+        // configuring application to use cutom 404 page
+        // for .NET 6 and later
+        app.UseExceptionHandler("/Error");
+        app.UseStatusCodePages(async context =>
+        {
+          // When using middleware, you often don’t need explicit actions for each error page. Instead, you configure the middleware to redirect to specific pages based on the error type.
+            var statusCode = context.HttpContext.Response.StatusCode;
+            switch (statusCode)
+            {
+                case StatusCodes.Status404NotFound:
+                    context.HttpContext.Response.Redirect("/404");
+                    break;
+                case StatusCodes.Status403Forbidden:
+                    context.HttpContext.Response.Redirect("/403");
+                    break;
+                case StatusCodes.Status500InternalServerError:
+                    context.HttpContext.Response.Redirect("/500");
+                    break;
+            }
+        });
+
+
 
       app.Run();
     }
