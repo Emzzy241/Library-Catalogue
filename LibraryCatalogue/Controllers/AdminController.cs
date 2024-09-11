@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq; // For accessing the .ToList() method that is capable of converting IList<T> to List<T>. The ToList() method can also convert items in ou rdatabase into a C# List<T>
 using LibraryCatalogue.ViewModels;
 
-
 namespace LibraryCatalogue.Controllers;
 
 [Authorize(Roles = "Admin")]

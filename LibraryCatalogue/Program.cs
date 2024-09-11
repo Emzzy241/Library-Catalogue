@@ -4,6 +4,113 @@ using Microsoft.Extensions.DependencyInjection;
 using LibraryCatalogue.Models;
 using Microsoft.AspNetCore.Identity;
 
+namespace LibraryCatalogue.Models;
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddControllersWithViews();
+
+            // Configure entity framework and Identity
+            builder.Services.AddDbContext<LibraryCatalogueContext>(dbContextOptions =>
+                dbContextOptions.UseMySql(
+                    builder.Configuration["ConnectionStrings:DefaultConnection"],
+                    ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:DefaultConnection"])
+                )
+            );
+
+            builder.Services.AddIdentity<LibraryUser, IdentityRole>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<LibraryCatalogueContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+            });
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+            });
+
+            WebApplication app = builder.Build();
+
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error/500");
+                app.UseHsts();
+            }
+            else
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            // Custom error handling middleware
+            app.UseStatusCodePagesWithReExecute("/Error/{0}");
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}"
+            );
+
+            // Role seeding logic (you might want to make this async and handle exceptions)
+            var scope = app.Services.CreateScope();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<LibraryUser>>();
+
+            string[] roleNames = { "Librarian", "Patron", "Admin" };
+
+            async Task RoleDecider()
+            {
+                foreach (var roleName in roleNames)
+                {
+                    var roleExists = await roleManager.RoleExistsAsync(roleName);
+                    if (!roleExists)
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(roleName));
+                    }
+                }
+            }
+
+            RoleDecider();
+
+            app.Run();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using LibraryCatalogue.Models;
+using Microsoft.AspNetCore.Identity;
+
 namespace LibraryCatalogue;
 
   class Program
@@ -31,7 +138,7 @@ namespace LibraryCatalogue;
 
         Whenever we call a method on our WebApplication app, we are configuring how our application handles HTTP requests (the "pipeline"). We configure the request pipeline by setting up middleware. Middleware is software that we add to our request pipeline that determines how the request should be processed. Each middleware decides whether to do some work, or to pass the request onto the next middleware. To optionally review more about this topic, visit the MS Docs.
         The order in which we set up the middleware matters! If these methods are called in the wrong order, you may run into unhandled exceptions or issues logging in with Identity. Fortunately, the Microsoft Docs has a list of how middleware should be ordered.
-      */
+      
 
       builder.Services.AddMvc();
       builder.Services.AddEntityFrameworkMySql();
@@ -84,11 +191,9 @@ namespace LibraryCatalogue;
           */
 
         /*
-           Update the Startup.cs or Program.cs (for Middleware Configuration)
-If you're using ASP.NET Core 6 or higher, you need to ensure that the middleware for handling AccessDeniedPath is properly configured.
-
-In the Program.cs file, find the part where the authentication cookie is configured, and set up the AccessDeniedPath as shown below:
-        */
+          Update the Startup.cs or Program.cs (for Middleware Configuration)
+          If you're using ASP.NET Core 6 or higher, you need to ensure that the middleware for handling AccessDeniedPath is properly configured.
+      
         builder.Services.ConfigureApplicationCookie(options =>
         {
             options.LoginPath = "/Account/Login"; // Redirect to login if not authenticated
@@ -115,7 +220,7 @@ In the Program.cs file, find the part where the authentication cookie is configu
             Enforces HTTPS: HSTS instructs the browser to always use HTTPS instead of HTTP for all subsequent requests to the web application. Once HSTS is enabled, if a user tries to connect to your website over HTTP, the browser will automatically switch to HTTPS.
             Prevents Protocol Downgrade Attacks: HSTS helps prevent attackers from tricking a user’s browser into using a less secure HTTP connection, which can be exploited for man-in-the-middle (MITM) attacks.
             Instructs the Browser to Cache the HTTPS Policy: The browser caches the HSTS policy for a specified period (the "max-age"), which means that even if a user manually tries to connect via HTTP, the browser will still use HTTPS.
-    */
+    
     }
     else
     {
@@ -178,32 +283,34 @@ In the Program.cs file, find the part where the authentication cookie is configu
         // }
 
         // This setup tells the application to redirect to the /Error/{0} page when an error occurs, where {0} is replaced by the HTTP status code.
-        // app.UseStatusCodePagesWithReExecute("/Error/{0}");
+        app.UseStatusCodePagesWithReExecute("/Error/{0}");
         // Or we can choose to handle each error and create multiple Razor pages for each error
 
         // configuring application to use cutom 404 page
         // for .NET 6 and later
-        app.UseExceptionHandler("/Error");
-        app.UseStatusCodePages(async context =>
-        {
-          // When using middleware, you often don’t need explicit actions for each error page. Instead, you configure the middleware to redirect to specific pages based on the error type.
-            var statusCode = context.HttpContext.Response.StatusCode;
-            switch (statusCode)
-            {
-                case StatusCodes.Status404NotFound:
-                    context.HttpContext.Response.Redirect("/404");
-                    break;
-                case StatusCodes.Status403Forbidden:
-                    context.HttpContext.Response.Redirect("/403");
-                    break;
-                case StatusCodes.Status500InternalServerError:
-                    context.HttpContext.Response.Redirect("/500");
-                    break;
-            }
-        });
+        // app.UseExceptionHandler("/Error");
+        // app.UseStatusCodePages(async context =>
+        // {
+        //   // When using middleware, you often don’t need explicit actions for each error page. Instead, you configure the middleware to redirect to specific pages based on the error type.
+        //     var statusCode = context.HttpContext.Response.StatusCode;
+        //     switch (statusCode)
+        //     {
+        //         case StatusCodes.Status404NotFound:
+        //             context.HttpContext.Response.Redirect("/404");
+        //             break;
+        //         case StatusCodes.Status403Forbidden:
+        //             context.HttpContext.Response.Redirect("/403");
+        //             break;
+        //         case StatusCodes.Status500InternalServerError:
+        //             context.HttpContext.Response.Redirect("/500");
+        //             break;
+        //     }
+        // });
 
 
 
       app.Run();
     }
   }
+
+*/
