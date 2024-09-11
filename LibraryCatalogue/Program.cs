@@ -82,6 +82,19 @@ namespace LibraryCatalogue;
           */
         });
 
+        /*
+           Update the Startup.cs or Program.cs (for Middleware Configuration)
+If you're using ASP.NET Core 6 or higher, you need to ensure that the middleware for handling AccessDeniedPath is properly configured.
+
+In the Program.cs file, find the part where the authentication cookie is configured, and set up the AccessDeniedPath as shown below:
+        */
+        builder.Services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = "/Account/Login"; // Redirect to login if not authenticated
+            options.AccessDeniedPath = "/Account/AccessDenied"; // Redirect to AccessDenied page
+        });
+
+
       WebApplication app = builder.Build();
 
       // app.UseDeveloperExceptionPage();
