@@ -1,25 +1,59 @@
 @{
     Layout = "_Layout";
+    ViewData["Title"] = "Viewing Account";
 }
 
 <h2>Library Catalogue Application</h2>
 <hr />
 @if(User.Identity.IsAuthenticated)
 {
-    <p>Hello @User.Identity.Name!</p>
+    <p>Hello <b>@User.Identity.Name! </b></p>
     <p>You are currently logged in</p>
     @using (Html.BeginForm("LogOff", "Account"))
     {
         <input type="submit" class="btn btn-primary" value ="Log Out"/>
-        
-        
-        <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
-        <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
-        <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
+        <br />
+        <br />
+        @*
+            Showing actions users can perform Depending on the account type
+        *@
+
+        @if(User.IsInRole("Librarian"))
+        {
+            <p><strong>This is a Librarian Account and here are some of the actions you can perform as a Librarian</strong></p>
+           <div class="links-grid3 text-center">
+                <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
+                <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
+                <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
+           </div>
+        }
+
+        @if(User.IsInRole("Admin"))
+        {
+            <p><strong>You are an Admin, and these are all the actions that you can perform</strong></p>
+            <div class="links-grid">
+                <p>@Html.ActionLink("Manage Users", "ManageUsers", "Admin")</p>
+                <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
+                <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
+                <p>@Html.ActionLink("Create or manage an account", "Index", "Account")</p>
+            </div>
+        }
+
+        @if(User.IsInRole("Patron"))
+        {
+            <p><strong>This is a Patron Account and it is a very limited account</strong></p>
+            <p>Here are some of the actions that you can perform with this account: </p>
+
+            <div class="links-grid2">
+                <p>@Html.ActionLink("Manage books", "Index", "Books")</p>
+                <p>@Html.ActionLink("Manage Authors", "Index", "Authors")</p>
+            
+            </div>
+        }
     }
 }
 else{
     <p>@Html.ActionLink("Register", "Register")</p>
     <p>@Html.ActionLink("Log in", "Login")</p>
 }
-<p>@Html.ActionLink("Home", "Index", "Home")</p>
+<p class="text-center">@Html.ActionLink("Home", "Index", "Home")</p>

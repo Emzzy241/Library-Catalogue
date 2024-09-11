@@ -58,8 +58,7 @@
             </p>
         }
         *@
-        <h3>@Model.Name</h3>
-        <h4>Books</h4>
+        <h4>Books by: @Model.Name</h4>
 
         @if(Model.AuthorBooks != null && Model.AuthorBooks.Count > 0)
         {
@@ -95,6 +94,12 @@
         }
     </div>
 </div>
+<br />
+ <div class="text-center links-grid2 ">
+            <p>@Html.ActionLink("Click to see Author's list", "Index", "Authors")</p>
+            <p>@Html.ActionLink("Click to see Book's list", "Index", "Books")</p>
+        </div>
+
 
 
 @************************************* Delete Modal **************************@
@@ -109,7 +114,7 @@
                                                 aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>Are you sure that you want to Delete <b>@Model.Name</b> </p>
+                                                    <p>Are you sure that you want to Delete the author: <b>@Model.Name</b> </p>
                                                 </div>`
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"

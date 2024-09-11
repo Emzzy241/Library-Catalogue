@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Authors";
+    ViewData["Title"] = "All Authors";
     Layout = "_Layout";
 }
 
@@ -7,6 +7,8 @@
 
 <div class="books-div">
     <div class="container">
+     <br />
+        <p>@Html.ActionLink("Click to see who is currently logged in ", "Index", "Account")</p>
         <h3 class="text-center mt-4">Here are the registered authors</h3>
 
         <div class="table-responsive mt-5 text-center">
@@ -45,6 +47,7 @@
         <p class="text-end mt-4">
             @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-dark" })
         </p>
+        <p class="text-center">@Html.ActionLink("See list of Books", "Index", "Books")</p>
     </div>
 </div>
 

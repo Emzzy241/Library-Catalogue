@@ -1,0 +1,37 @@
+@model List<LibraryCatalogue.ViewModels.UserViewModel>
+
+<h2>Deleted Users</h2>
+
+<!-- Display success message if available -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@string.Join(", ", user.Roles)</td>
+                <td>
+                    <form asp-action="RestoreUser" asp-route-id="@user.Id" method="post">
+                        <button type="submit" class="btn btn-success">Restore</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="ManageUsers" class="btn btn-primary">Back to User Management</a>

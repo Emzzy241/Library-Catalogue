@@ -3,6 +3,7 @@ using System;
 using LibraryCatalogue.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryCatalogue.Solution.Migrations
 {
     [DbContext(typeof(LibraryCatalogueContext))]
-    partial class LibraryCatalogueContextModelSnapshot : ModelSnapshot
+    [Migration("20240908155931_Add AccountType entity to database")]
+    partial class AddAccountTypeentitytodatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,9 +186,6 @@ namespace LibraryCatalogue.Solution.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("longtext");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("longtext");

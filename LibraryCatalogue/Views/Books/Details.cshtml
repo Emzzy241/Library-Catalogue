@@ -44,7 +44,11 @@
         }
     </div>
 </div>
-
+ <br />
+ <div class="links-grid2 text-center">
+            <p>@Html.ActionLink("Click to see Author's list", "Index", "Authors")</p>
+            <p>@Html.ActionLink("Click to see Book's list", "Index", "Books")</p>
+        </div>
 
 @*
     A Quick Note, whenever you use a modal as a data-bs-toggle, we have to be able to actually display that modal below i.e what gets shown when that button gets clicked
@@ -62,7 +66,7 @@
                                             aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <p>Are you sure that you want to checkout <b>@Model.Name</b> </p>
+                                                <p>Are you sure you want to checkout <b>@Model.Name</b> </p>
                                             </div>`
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
@@ -93,7 +97,7 @@
                                                 aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>Are you sure that you want to Delete <b>@Model.Name</b> </p>
+                                                    <p>Are you sure you want to Delete the book: <b>@Model.Name</b> </p>
                                                 </div>`
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
@@ -129,7 +133,7 @@
                                                 aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>Are you sure that you want to remove <b>@authorBook.Author.Name</b> </p>
+                                                    <p>Are you sure you want to remove the author: <b>@authorBook.Author.Name</b> </p>
                                                 </div>`
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"

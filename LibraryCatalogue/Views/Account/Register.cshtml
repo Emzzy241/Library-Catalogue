@@ -1,5 +1,6 @@
 @{
     Layout = "_Layout";
+    ViewData["Title"] = "Register Account";
 }
 
 @using LibraryCatalogue.ViewModels;
@@ -8,6 +9,8 @@
 
 <h2>Register a new user </h2>
 <hr />
+<br />
+<p class="text-danger">Please note that Admin accounts are not available to regular users</p>
 
 @if(!ViewData.ModelState. IsValid)
 {
@@ -48,8 +51,25 @@
     </div>
     <br />
 
+    @* ADDING the code below in a bid to allow users select the account type that they want
+     *@
+     
+     <div class="form-group">
+        <div>
+        @*
+            Ensuring the frontend communicates with the backend... modifying thr form to ensure the selected AccountType is correctly posted to the backend
+        *@
+        <label asp-for="SelectedRole"></label>
+        <select asp-for="SelectedRole" asp-items="@(new SelectList(Model.Roles))">
+            <option value="">-- Select Account Type --</option>
+        </select>
+        <span asp-validation-for="SelectedRole"></span>
+    </div>
+    </div>
+    <br />  
+
     <div class="text-center">
-        <input type="submit" value="Regsiter" class="btn btn-primary"/>
+        <input type="submit" value="Register" class="btn btn-primary"/>
     </div>
     <br />
 }

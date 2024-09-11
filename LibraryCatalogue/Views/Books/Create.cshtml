@@ -8,6 +8,7 @@
 <h4>Creating a Book</h4>
 <p>Fill in  the below details to add in a new book</p>
 
+<p class="text-danger"><strong>Please Note: </strong>You must create an author first before creating a book!</p>
 @using(Html.BeginForm())
 {
     <div class="form-group mt-4">
@@ -35,4 +36,8 @@
         <br />
     <input type="submit" class="btn btn-primary" value="submit"/>
 
+     <div class="text-center links-grid2 ">
+            <p>@Html.ActionLink("Click to see Author's list", "Index", "Authors")</p>
+            <p>@Html.ActionLink("Click to see Book's list", "Index", "Books")</p>
+        </div>
 }

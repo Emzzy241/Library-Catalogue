@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Books";
+    ViewData["Title"] = "All Books";
     Layout = "_Layout";
 }
 
@@ -12,6 +12,8 @@
     <div class="container">
     
         <h2>Dynasty's Library</h2>
+        <br />
+        <p>@Html.ActionLink("Click to see who is currently logged in ", "Index", "Account")</p>
         <br />
         <h3 class="text-center mt-4">Here are the available books</h3>
         <div class="search-div">
@@ -86,6 +88,9 @@
         }*@
         
         <p class="text-end mt-2">@Html.ActionLink("New", "Create", null, new { @class = "btn btn-outline-dark" })</p>
+        <p><strong>Note, you need to create an author first before creating a book. If you have created an author before, proceed and click New above to create a New Book</strong></p>
+        <p>@Html.ActionLink("Click to Create Author", "Create", "Authors")</p>
+   
     </div>
 </div>
 

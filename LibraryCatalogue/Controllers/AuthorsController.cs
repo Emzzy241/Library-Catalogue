@@ -12,7 +12,8 @@ using System.Linq;
 
 namespace LibraryCatalogue.Controllers;
 
-// [Authorize(Roles = "Librarian")]
+// Now that you have roles and role policies, you can apply role-based authorization to your controllers and actions.
+[Authorize(Roles = "Librarian,Admin")]
 public class AuthorsController : Controller
 {
     private readonly LibraryCatalogueContext _db;

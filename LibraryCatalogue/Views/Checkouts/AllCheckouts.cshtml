@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Checkouts";
+    ViewData["Title"] = "All Checkouts";
     Layout = "_Layout";
 }
 
@@ -11,7 +11,7 @@
     <div class="container text-center">
         <p class="text-danger">@ViewBag.ErrorMessage</p>
 
-                <h1 class="mt-3">All Users Checkouts</h1>
+                <h1 class="mt-3">All User's Checkouts</h1>
                 <div class="search-div">
                     @using (Html.BeginForm("Search", "Checkouts", FormMethod.Post))
                     {
@@ -75,5 +75,12 @@
                         }
                     </table>
                 </div>
+
+                  <br />
+        <div class="links-grid">
+            <p>@Html.ActionLink("Click to see Author's list", "Index", "Authors")</p>
+            <p>@Html.ActionLink("Click to see Book's list", "Index", "Books")</p>
+            <p>@Html.ActionLink("Click to go back", "Index", "Checkouts")</p>
+        </div>
     </div>
 </div>
