@@ -51,8 +51,9 @@ namespace LibraryCatalogue;
 
         });
 
-        // Default Password settings.
-      /* builder.Services.Configure<IdentityOptions>(options =>
+        // Default Password settings. For Production mode
+        // The middleware for better passwords
+      builder.Services.Configure<IdentityOptions>(options =>
       {
         options.Password.RequireDigit = true;
         options.Password.RequireLowercase = true;
@@ -61,10 +62,10 @@ namespace LibraryCatalogue;
         options.Password.RequiredLength = 6;
         options.Password.RequiredUniqueChars = 1;
 
-      */
-
-      // });
+      });
       
+       /*
+       
         // Changing the default settings only for development mode... Do not do it for production mode
         builder.Services.Configure<IdentityOptions>(options =>
         {
@@ -75,12 +76,12 @@ namespace LibraryCatalogue;
           options.Password.RequiredLength = 0;
           options.Password.RequiredUniqueChars = 0;
 
-          /*
+          
             The configuration above allows us to input a password of a single character to create a new user. Even though the RequiredLength property is 0, we can't actually put in an empty password because we have a validation attribute in place that states that some input for the RegisterViewModel.Password property is required.
             Keep in mind that the above settings should never be used in a production environment — only during development to make our lives a bit easier.
             Finally, note that when we change our password requirements in Program.cs, we need to make a corresponding update to our [RegularExpression] validation attribute for the RegisterViewModel.Password property.
-          */
         });
+          */
 
         /*
            Update the Startup.cs or Program.cs (for Middleware Configuration)
