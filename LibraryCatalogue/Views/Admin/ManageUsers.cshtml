@@ -1,4 +1,7 @@
 @model IEnumerable<LibraryCatalogue.ViewModels.UserViewModel>
+ <br />
+        <p>@Html.ActionLink("Click to see who is currently logged in ", "Index", "Account")</p>
+ <br />
 
 <p>Below is a list of Accounts that have been opened on the Application</p>
 <br />
@@ -50,7 +53,8 @@
 </table>
 
 <br />
-<div class="text-center links-grid2">
+<div class="text-center links-grid3">
     <p>@Html.ActionLink("Click to see Author's list", "Index", "Authors")</p>
     <p>@Html.ActionLink("Click to see Book's list", "Index", "Books")</p>
+    <p>@Html.ActionLink("Click to see All Deleted Users", "ViewDeletedUsers", "Admin")</p>
 </div>

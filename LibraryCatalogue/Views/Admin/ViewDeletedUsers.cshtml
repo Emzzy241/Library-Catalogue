@@ -2,6 +2,14 @@
 
 <h2>Deleted Users</h2>
 
+<!-- Display success message if available -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <table class="table">
     <thead>
         <tr>

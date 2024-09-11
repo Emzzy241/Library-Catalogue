@@ -141,10 +141,14 @@ public class AdminController : Controller
         {
             user.IsDeleted = false;
             await _userManager.UpdateAsync(user);
+
+            // Set a success message in TempData
+            TempData["SuccessMessage"] = "User account has been successfully restored.";
         }
 
         return RedirectToAction("ViewDeletedUsers");
     }
+
 
 
 
